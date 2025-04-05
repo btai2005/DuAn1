@@ -160,7 +160,7 @@ public class HoaDon extends javax.swing.JPanel {
 
         jPopupMenu1.setAutoscrolls(true);
 
-        jMenuItem3.setText("Sua so luong");
+        jMenuItem3.setText("Sửa Số Lượng");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -2156,7 +2156,7 @@ public void createFromKhachHang() {
     }
     public void updateSoLuong() {
 
-        int i = JOptionPane.showConfirmDialog(this, "Bạn có muốn sửa số lượng sản phẩm này ?", "TaiCho", JOptionPane.YES_OPTION);
+        int i = JOptionPane.showConfirmDialog(this, "Bạn có muốn sửa số lượng sản phẩm này ?", "Xác Nhận", JOptionPane.YES_OPTION);
         
         int indexHdC = tblHoaDonCho.getSelectedRow();
         int indexHd = tblHoaDon.getSelectedRow();

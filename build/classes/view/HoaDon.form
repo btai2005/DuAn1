@@ -13,7 +13,7 @@
       <SubComponents>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Sua so luong"/>
+            <Property name="text" type="java.lang.String" value="S&#x1eed;a S&#x1ed1; L&#x1b0;&#x1ee3;ng"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
