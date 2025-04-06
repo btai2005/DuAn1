@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import view.HoaDon;
+import view.SanPham1;
 import view.SanPhamView;
 import view.TrangChu;
 
@@ -23,9 +24,9 @@ public class Main extends javax.swing.JFrame {
             if (index == 0) {
                     setForm(new TrangChu());
             } else if (index == 1) {
-                    setForm(new SanPhamView());
+                    setForm(new SanPham1());
             } else if (index == 2) {
-
+                    
             } else if (index == 3) {
                 setForm(new HoaDon());
             } else {

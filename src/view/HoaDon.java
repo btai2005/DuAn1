@@ -1928,12 +1928,7 @@ private void fillDataHoaDon(HoaDonModel hdct) {
         clearTable();
     }
 
-//    public void selectedArrFirst() {
-//        if (!qLy.getAllHoaDon(txtSearchMaHoaDon.getText(), cbbTrangThai.getSelectedIndex()).isEmpty(),nbd.nkt) {
-//            this.tblLichSuHoaDon.setRowSelectionInterval(0, 0);
-//            this.showData(0);
-//        }
-//    }
+
     public void clearTable() {
         DefaultTableModel tblModel = (DefaultTableModel) tblSanPhamHD.getModel();
         tblModel.setRowCount(0);
@@ -2224,7 +2219,6 @@ public void createFromKhachHang() {
             JOptionPane.showMessageDialog(this,"Hóa đơn trống");
         } else {
             if (!txtMaVoucher.getText().isEmpty()) {
-
                 this.inputThanhTien(false);
             }
             qLy.xuatHoaDon(ma, txtTenKhachHang.getText(), txtSoDienThoai.getText(), txtTongTien.getText(),
