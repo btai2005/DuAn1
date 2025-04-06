@@ -741,7 +741,7 @@ public class HoaDon extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã Hóa Đơn", "Người Tạo", "Khách Hàng", "Thời Gian Tạo", "Thành Tiền", "Trạng Thái"
+                "Mã Hóa Đơn", "Người Tạo", "Khách Hàng", "Thời Gian Tạo", "Trạng Thái", "Thành Tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {

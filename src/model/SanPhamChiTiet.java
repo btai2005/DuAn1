@@ -9,28 +9,30 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 //import javax.swing.ImageIcon;
 import java.awt.Image;
-
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  *
  * @author Dang
  */
 public class SanPhamChiTiet {
-    private int id;                    
-    private String maSanPhamChiTiet;   
-    private String tenSanPhamChiTiet;  
-    private BigDecimal giaSanPham;     
-    private String anhSanPham;         
-    private int soLuong;               
-    private String moTa;               
-    private int idChatLieu;                       
-    private int idKichCo;              
-    private int idMauSac;              
-    private int idLoaiSanPham;             
-    private int trangThai;   
+
+    private int id;
+    private String maSanPhamChiTiet;
+    private String tenSanPhamChiTiet;
+    private BigDecimal giaSanPham;
+    private String anhSanPham;
+    private int soLuong;
+    private String moTa;
+    private int idChatLieu;
+    private int idKichCo;
+    private int idMauSac;
+    private int idLoaiSanPham;
+    private int trangThai;
     private String tenMau;
     private int kichCo;
-    private Date ngayTao;              
+    private Date ngayTao;
     private Date ngaySua;
 
     public SanPhamChiTiet() {
@@ -62,7 +64,6 @@ public class SanPhamChiTiet {
         this.tenMau = tenMau;
         this.kichCo = kichCo;
     }
-    
 
     public int getId() {
         return id;
@@ -191,29 +192,29 @@ public class SanPhamChiTiet {
     public void setKichCo(int kichCo) {
         this.kichCo = kichCo;
     }
-    
-    
 
     @Override
     public String toString() {
         return "SanPhamChiTiet{" + "id=" + id + ", maSanPhamChiTiet=" + maSanPhamChiTiet + ", tenSanPhamChiTiet=" + tenSanPhamChiTiet + ", giaSanPham=" + giaSanPham + ", anhSanPham=" + anhSanPham + ", soLuong=" + soLuong + ", moTa=" + moTa + ", idChatLieu=" + idChatLieu + ", idKichCo=" + idKichCo + ", idMauSac=" + idMauSac + ", idLoaiSanPham=" + idLoaiSanPham + ", trangThai=" + trangThai + ", ngayTao=" + ngayTao + ", ngaySua=" + ngaySua + '}';
     }
-    
+
     private ImageIcon resizeImage(String path, int width, int height) {
         ImageIcon icon = new ImageIcon(path);
         Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
     }
 
+    public Object[] getData() {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String giaFormatted = currencyFormat.format(getGiaSanPham());
 
-    public Object[] getData () {
-        return new Object[] {
+        return new Object[]{
             resizeImage(getAnhSanPham(), 80, 80),
-                    getTenSanPhamChiTiet(), 
-                        getGiaSanPham(),
-                            getSoLuong(),
-                                getKichCo(),
-                                    getTenMau()
+            getTenSanPhamChiTiet(),
+            giaFormatted,
+            getSoLuong(),
+            getKichCo(),
+            getTenMau()
         };
     }
 }

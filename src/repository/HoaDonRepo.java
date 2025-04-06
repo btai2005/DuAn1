@@ -49,7 +49,7 @@ public class HoaDonRepo {
         sql.append(" AND hd.ngayTao BETWEEN '").append(bd).append("' AND '").append(kt).append("' ");
     }
 
-    sql.append(" ORDER BY hd.ngayTao DESC"); // ✅ luôn đặt ORDER BY ở cuối
+    sql.append(" ORDER BY hd.ngayTao DESC"); 
 
     try {
         ps = conn.prepareStatement(sql.toString());

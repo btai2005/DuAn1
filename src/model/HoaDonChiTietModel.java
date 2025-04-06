@@ -4,11 +4,15 @@
  */
 package model;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  *
  * @author ADMIN
  */
 public class HoaDonChiTietModel {
+
     private int id;
     private String ma;
     private String ten;
@@ -53,7 +57,8 @@ public class HoaDonChiTietModel {
         this.soLuong = soLuong;
         this.tongTien = tongTien;
     }
-    public HoaDonChiTietModel(int id, String ma, String tenKhachHang, String soDienThoai, String ngayTao,String loaiThanhToan, int trangThai, int tongTien, String ten, int gia, int soLuong, int thanhTien) {
+
+    public HoaDonChiTietModel(int id, String ma, String tenKhachHang, String soDienThoai, String ngayTao, String loaiThanhToan, int trangThai, int tongTien, String ten, int gia, int soLuong, int thanhTien) {
         this.id = id;
         this.ma = ma;
         this.tenKhachHang = tenKhachHang;
@@ -67,7 +72,8 @@ public class HoaDonChiTietModel {
         this.soLuong = soLuong;
         this.thanhTien = thanhTien;
     }
-        public HoaDonChiTietModel(int id, String ma, String tenKhachHang, String soDienThoai, String ngayTao,String loaiThanhToan, int trangThai, int tongTien){
+
+    public HoaDonChiTietModel(int id, String ma, String tenKhachHang, String soDienThoai, String ngayTao, String loaiThanhToan, int trangThai, int tongTien) {
         this.id = id;
         this.ma = ma;
         this.tenKhachHang = tenKhachHang;
@@ -93,7 +99,7 @@ public class HoaDonChiTietModel {
     public void setMa(String ma) {
         this.ma = ma;
     }
-    
+
     public String getTen() {
         return ten;
     }
@@ -146,8 +152,24 @@ public class HoaDonChiTietModel {
         this.id = id;
         this.idSPCT = idSPCT;
     }
-    
+
     public Object[] toDataRow() {
-        return new Object[] {getMa(), getTen(), getGia(), getSoLuong(), getGia() * getSoLuong()};
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+        double gia = getGia();
+        int soLuong = getSoLuong();
+        double thanhTien = gia * soLuong;
+
+        String giaFormatted = currencyFormat.format(gia);
+        String thanhTienFormatted = currencyFormat.format(thanhTien);
+
+        return new Object[]{
+            getMa(),
+            getTen(),
+            giaFormatted, 
+            soLuong,
+            thanhTienFormatted 
+        };
     }
+
 }

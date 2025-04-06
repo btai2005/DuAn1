@@ -4,12 +4,16 @@
  */
 package model;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  *
  * @author ADMIN
  */
 public class HoaDonModel {
-   private int id;
+
+    private int id;
     private String maHoaDon;
     private String loaiThanhToan;
     private int tongTien;
@@ -53,6 +57,7 @@ public class HoaDonModel {
         this.thoiGianTao = thoiGianTao;
         this.trangThai = trangThai;
     }//idVoucher
+
     public HoaDonModel(int id, String maHoaDon, String tenNhanVien, String tenKhachHang, String soDienThoai, String thoiGianTao, String loaiThanhToan, int tongTien, String idVoucher, int trangThai) {
         this.id = id;
         this.maHoaDon = maHoaDon;
@@ -121,7 +126,7 @@ public class HoaDonModel {
     public void setTenNhanVien(String tenNhanVien) {
         this.tenNhanVien = tenNhanVien;
     }
-    
+
     public int getIdVoucher() {
         return idVoucher;
     }
@@ -158,14 +163,22 @@ public class HoaDonModel {
     public String toString() {
         return "HoaDonModel{" + "id=" + id + ", maHoaDon=" + maHoaDon + ", loaiThanhToan=" + loaiThanhToan + ", tongTien=" + tongTien + ", tenKhachHang=" + tenKhachHang + ", soDienThoai=" + soDienThoai + ", tenNhanVien=" + tenNhanVien + ", idVoucher=" + idVoucher + ", tenVoucher=" + tenVoucher + ", thoiGianTao=" + thoiGianTao + ", trangThai=" + trangThai + '}';
     }
-    
-    
-    
+
     public Object[] toDataRow() {
-        return new Object[] {getMaHoaDon(), getTenNhanVien(), getTenKhachHang(), getThoiGianTao(), getTrangThai() == 1 ? "Chưa Thanh Toán":"Đã Thanh Toán"};
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String tongTienFormatted = currencyFormat.format(getTongTien());
+
+        return new Object[]{
+            getMaHoaDon(),
+            getTenNhanVien(),
+            getTenKhachHang(),
+            getThoiGianTao(),
+            getTrangThai() == 1 ? "Chưa Thanh Toán" : "Đã Thanh Toán",
+            tongTienFormatted
+        };
     }
-    
+
     public Object[] toDataRowHoaDon() {
-        return new Object[] {getMaHoaDon(), getTenNhanVien(), getTenKhachHang(), getThoiGianTao(), getTongTien(), getTrangThai() == 1 ? "Chưa Thanh Toán":"Đã Thanh Toán"};
+        return new Object[]{getMaHoaDon(), getTenNhanVien(), getTenKhachHang(), getThoiGianTao(), getTongTien(), getTrangThai() == 1 ? "Chưa Thanh Toán" : "Đã Thanh Toán"};
     }
 }
