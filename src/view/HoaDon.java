@@ -9,8 +9,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
@@ -1292,13 +1294,12 @@ public class HoaDon extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHoanTienActionPerformed
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-
-        this.thanhToan();
+        this.thanhToan();        
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInHoaDonActionPerformed
 
-        //        this.inHoaDon(jblMaHoaDon.getText(), true);
+                this.inHoaDon(jblMaHoaDon.getText(), true);
     }//GEN-LAST:event_btnInHoaDonActionPerformed
 
     private void btnTaoHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHoaDonActionPerformed
@@ -1316,21 +1317,6 @@ public class HoaDon extends javax.swing.JPanel {
         fillTableSp();
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-
-        this.fillTableHoaDon();
-    }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
-        this.fillTableHoaDon();
-    }//GEN-LAST:event_btnLocActionPerformed
-
-    private void tblLichSuHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichSuHoaDonMouseClicked
-
-        this.fillDataHoaDon(getLichSuHoaDon(tblLichSuHoaDon.getSelectedRow()));
-        this.fillTableHoaDonCT(getLichSuHoaDon(tblLichSuHoaDon.getSelectedRow()).getId());
-    }//GEN-LAST:event_tblLichSuHoaDonMouseClicked
-
     private void txtTienDuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTienDuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTienDuActionPerformed
@@ -1339,10 +1325,6 @@ public class HoaDon extends javax.swing.JPanel {
 
         this.chonSanPham();
     }//GEN-LAST:event_tblsanphamMouseClicked
-
-    private void txtSearchMaHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchMaHoaDonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchMaHoaDonActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
         // TODO add your handling code here:
@@ -1361,6 +1343,25 @@ public class HoaDon extends javax.swing.JPanel {
         // TODO add your handling code here:
         this.updateTrangThai();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void txtSearchMaHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchMaHoaDonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchMaHoaDonActionPerformed
+
+    private void tblLichSuHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichSuHoaDonMouseClicked
+
+        this.fillDataHoaDon(getLichSuHoaDon(tblLichSuHoaDon.getSelectedRow()));
+        this.fillTableHoaDonCT(getLichSuHoaDon(tblLichSuHoaDon.getSelectedRow()).getId());
+    }//GEN-LAST:event_tblLichSuHoaDonMouseClicked
+
+    private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
+        this.fillTableHoaDon();
+    }//GEN-LAST:event_btnLocActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+
+        this.fillTableHoaDon();
+    }//GEN-LAST:event_btnSearchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1882,17 +1883,38 @@ public class HoaDon extends javax.swing.JPanel {
         return qlyhd.getAllHoaDon(txtSearchMaHoaDon.getText(), cbbTrangThai.getSelectedIndex(), nbd, nkt).get(index);
     }
 
-    private void fillDataHoaDon(HoaDonModel hdct) {
-        lblMaHoaDon.setText(hdct.getMaHoaDon());
-        lblTenKhachHang.setText(hdct.getTenKhachHang() == null || hdct.getTenKhachHang().trim().isEmpty() ? "Khách vãng lai" : hdct.getTenKhachHang());
-        lblSoDienThoai.setText(hdct.getSoDienThoai());
-        lblThoiGianTao.setText(hdct.getThoiGianTao());
-        lblLoaiThanhToan.setText(hdct.getLoaiThanhToan());
-        lblTrangThai.setText(String.valueOf(hdct.getTrangThai() == 0 ? "Đã Thanh Toán" : "Chưa Thanh Toán"));
-        lbltenVoucher.setText(hdct.getTenVoucher());
-        lblTongTienHD.setText(String.valueOf(hdct.getTongTien()));
-        lblThanhTienHD.setText(String.valueOf(hdct.getTongTien()));
-    }
+ 
+
+private void fillDataHoaDon(HoaDonModel hdct) {
+    lblMaHoaDon.setText(hdct.getMaHoaDon());
+    
+    // Kiểm tra và hiển thị tên khách hàng hoặc "Khách vãng lai"
+    lblTenKhachHang.setText(hdct.getTenKhachHang() == null || hdct.getTenKhachHang().trim().isEmpty() ? "Khách vãng lai" : hdct.getTenKhachHang());
+    
+    // Hiển thị số điện thoại
+    lblSoDienThoai.setText(hdct.getSoDienThoai());
+    
+    // Hiển thị thời gian tạo hóa đơn
+    lblThoiGianTao.setText(hdct.getThoiGianTao());
+    
+    // Hiển thị loại thanh toán
+    lblLoaiThanhToan.setText(hdct.getLoaiThanhToan());
+    
+    // Hiển thị trạng thái thanh toán
+    lblTrangThai.setText(String.valueOf(hdct.getTrangThai() == 0 ? "Đã Thanh Toán" : "Chưa Thanh Toán"));
+    
+    // Hiển thị tên voucher (nếu có)
+    lbltenVoucher.setText(hdct.getTenVoucher());
+    
+    // Định dạng số tiền và hiển thị (có dấu phân cách hàng nghìn)
+    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    String formattedTongTien = currencyFormat.format(hdct.getTongTien());
+    lblTongTienHD.setText(formattedTongTien);
+    
+    // Định dạng số tiền cho thanh toán
+    lblThanhTienHD.setText(formattedTongTien);
+}
+
 
     public void lamMoi() {
         this.fillTableHoaDon();
@@ -1917,21 +1939,16 @@ public class HoaDon extends javax.swing.JPanel {
         tblModel.setRowCount(0);
     }
 
-//    public void fillTableHoaDonChiTiet(int index) {
-//        DefaultTableModel dblModel = (DefaultTableModel) tblSanPhamHD.getModel();
-//        dblModel.setRowCount(0);
-//
-//        for (HoaDonChiTietModel x : qLy.getAllHdct(qLy.getAllHoaDon(txtSearchMaHoaDon.getText(), cbbTrangThai.getSelectedIndex()).get(index).getId())) {
-//            dblModel.addRow(x.toDataRow());
-//        }
-//    }
     private void fillTableHoaDonCT (int idHoaDon) {
         DefaultTableModel dblModel = (DefaultTableModel) tblSanPhamHD.getModel();
         dblModel.setRowCount(0);
+        
         for (HoaDonChiTietModel x : qLyChiTiet.getHdct (idHoaDon)) {
             dblModel.addRow(x.toDataRow());
+            
         }
     }
+    
 //    public void removeTitleBar() {
 //        ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
 //    }
@@ -2199,5 +2216,20 @@ public void createFromKhachHang() {
             }
         }
     }
+    public void inHoaDon(String ma, boolean in) {
 
+        if (jblMaHoaDon.getText().equals("#####")) {
+            JOptionPane.showMessageDialog(this,"Chọn hóa đơn cần in");
+        } else if (txtTongTien.getText().length() < 2) {
+            JOptionPane.showMessageDialog(this,"Hóa đơn trống");
+        } else {
+            if (!txtMaVoucher.getText().isEmpty()) {
+
+                this.inputThanhTien(false);
+            }
+            qLy.xuatHoaDon(ma, txtTenKhachHang.getText(), txtSoDienThoai.getText(), txtTongTien.getText(),
+                    txtMaVoucher.getText(), txtGiamGia.getText(), txtThanhTien.getText(), in);
+
+        }
+    }
 }

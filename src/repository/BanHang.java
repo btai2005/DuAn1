@@ -5,22 +5,40 @@
 package repository;
 
 import Utils.Dbconnection;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -592,5 +610,155 @@ public class BanHang {
             return 0;
         }
     }
-   
+   public void xuatHoaDon(String ma, String tenKh, String sdt, String tongTien, String maVoucher, String giam, String thanhTien, boolean in) {
+    String fileName = "E://DuAn1//" + ma + ".pdf";
+    String fontPath = "C:/Windows/Fonts/Arial.ttf";
+    // Thông tin công ty
+    String companyName = "Sneaker Squad";
+    String companyAddress = "Mỹ Đình - Quận Nam Từ Niêm";
+    String companyPhone = "0984184412";
+    String companyLogo = "E://DuAn1//banner.png";
+
+    // Thông tin khách hàng
+    LocalDate today = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'tháng' MM 'năm' yyyy");
+    String invoiceDate = "Ngày " + today.format(formatter);
+
+    // Loại bỏ ký tự không phải số (ví dụ "HD" trong "HD004")
+    String numericPart = ma.replaceAll("[^0-9]", "");
+    int id = 0;
+    try {
+        id = Integer.parseInt(numericPart); // Chuyển đổi phần số của mã thành int
+    } catch (NumberFormatException e) {
+        // Xử lý trường hợp mã không hợp lệ
+        JFrame frame = new JFrame();  // Khởi tạo JFrame (nếu chưa có)
+        JOptionPane.showMessageDialog(frame, "Mã hóa đơn không hợp lệ: " + ma);
+        return;
+    }
+
+    ArrayList<HoaDonChiTietModel> list = getAllHoaDon(id);
+    
+    if (list == null || list.isEmpty()) {
+        JFrame frame = new JFrame();  // Khởi tạo JFrame (nếu chưa có)
+        JOptionPane.showMessageDialog(frame, "Không có hóa đơn với mã " + ma);
+        return;
+    }
+
+    List<String[]> products = new ArrayList<>();
+    for (HoaDonChiTietModel x : list) {
+        products.add(new String[]{x.getTen(), String.valueOf(x.getSoLuong()), String.valueOf(x.getGia())});
+    }
+    
+    Document document = new Document();
+    
+    try {
+        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+        document.open();
+        
+        BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        
+        Font fontNormal = new Font(baseFont, 12);
+        Font fontBold = new Font(baseFont, 12, Font.BOLD);
+        Font fontItalic = new Font(baseFont, 12, Font.ITALIC);
+        Font fontLarge = new Font(baseFont, 18, Font.BOLD);
+        
+        com.itextpdf.text.Image img = com.itextpdf.text.Image.getInstance(companyLogo);
+        img.scaleToFit(100, 100);
+        img.setAlignment(Element.ALIGN_LEFT);
+        document.add(img);
+        
+        Paragraph companyInfo = new Paragraph(companyName + "\n" + companyAddress + "\n" + "SĐT: " + companyPhone, fontBold);
+        companyInfo.setAlignment(Element.ALIGN_RIGHT);
+        document.add(companyInfo);
+        
+        document.add(new Paragraph("\n"));
+        
+        Paragraph title = new Paragraph("HÓA ĐƠN", fontLarge);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+        
+        document.add(new Paragraph("\n"));
+        
+        Paragraph information = new Paragraph("Thông tin khách hàng", fontBold);
+        information.setAlignment(Element.ALIGN_LEFT);
+        document.add(information);
+        
+        document.add(new Paragraph("\n"));
+        
+        if (!tenKh.equals("Khách Vãng Lai")) {
+            Paragraph customerInfo = new Paragraph("Tên: " + tenKh + "\n" + "SĐT: " + sdt, fontNormal);
+            document.add(customerInfo);
+        } else {
+            Paragraph customerInfo = new Paragraph(tenKh, fontNormal);
+            document.add(customerInfo);
+        }
+        
+        Paragraph date = new Paragraph(invoiceDate, fontItalic);
+        date.setAlignment(Element.ALIGN_RIGHT);
+        document.add(date);
+        
+        document.add(new Paragraph("\n"));
+        
+        PdfPTable table = new PdfPTable(3);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+        
+        table.addCell(new PdfPCell(new Phrase("Tên sản phẩm", fontBold)));
+        table.addCell(new PdfPCell(new Phrase("Số lượng", fontBold)));
+        table.addCell(new PdfPCell(new Phrase("Đơn giá (VND)", fontBold)));
+        
+        for (String[] product : products) {
+            table.addCell(new PdfPCell(new Paragraph(product[0], fontNormal)));
+            table.addCell(new PdfPCell(new Paragraph(product[1], fontNormal)));
+            table.addCell(new PdfPCell(new Paragraph(product[2], fontNormal)));
+        }
+        
+        document.add(table);
+        
+        document.add(new Paragraph("\n"));
+        
+        Paragraph total = new Paragraph("Tổng số tiền: " + tongTien + " VND", fontBold);
+        total.setAlignment(Element.ALIGN_LEFT);
+        document.add(total);
+        
+        document.add(new Paragraph("\n"));
+        
+        if (!maVoucher.isEmpty()) {
+            Paragraph voucher = new Paragraph("Mã Voucher: " + maVoucher + " \nGiảm: " + giam, fontBold);
+            voucher.setAlignment(Element.ALIGN_LEFT);
+            document.add(voucher);
+        }
+        
+        document.add(new Paragraph("\n"));
+        
+        Paragraph ThanhTien = new Paragraph("Thành tiền: " + thanhTien + " VND", fontBold);
+        ThanhTien.setAlignment(Element.ALIGN_RIGHT);
+        document.add(ThanhTien);
+        
+        Paragraph thanksMessage = new Paragraph("\nCảm ơn quý khách đã mua hàng!", fontItalic);
+        thanksMessage.setAlignment(Element.ALIGN_CENTER);
+        document.add(thanksMessage);
+        
+        document.close();
+        
+        if (in) {
+            File pdfFile = new File(fileName);
+            if (pdfFile.exists()) {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(pdfFile);
+                } else {
+                    System.out.println("Desktop is not supported, cannot open the file.");
+                }
+            } else {
+                System.out.println("File not found.");
+            }
+        }
+        
+    } catch (DocumentException | IOException e) {
+        e.printStackTrace();
+    }
+}
+
+
 }

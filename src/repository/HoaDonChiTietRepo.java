@@ -25,41 +25,43 @@ public class HoaDonChiTietRepo {
         this.conn = Dbconnection.getConnection();
     }
     
-    public ArrayList<HoaDonChiTietModel> getHdct (int id) {
-        
-        ArrayList<HoaDonChiTietModel> list = new ArrayList<>();
-        
-        String sql = ("""
-                      select hdct.id, spct.maSanPhamChiTiet, kh.hoTen, kh.soDienThoai, hdct.ngayTao, 
+    public ArrayList<HoaDonChiTietModel> getHdct(int id) {
+    ArrayList<HoaDonChiTietModel> list = new ArrayList<>();
+
+    String sql = ("""
+                  select hdct.id, spct.maSanPhamChiTiet, kh.hoTen, kh.soDienThoai, hdct.ngayTao, 
                       			hd.loaiThanhToan,hdct.trangThai,hd.tongTien,
                       			sp.TenLoaiSanPham tenGiay, spct.giaSanPham, hdct.soLuong,
                       			spct.giaSanPham * hdct.soLuong thanhTien 
-                      from HoaDonChiTiet hdct
+                  from HoaDonChiTiet hdct
                       	LEFT JOIN SanPhamChiTiet spct ON hdct.idSanPhamChiTiet = spct.id
                       	LEFT JOIN LoaiSanPham sp ON spct.ID = sp.id
                       	LEFT JOIN HoaDon hd ON hdct.idHoaDon = hd.id
                       	LEFT JOIN KhachHang kh ON hd.idKhachHang = kh.id
-                      where hd.ID = ?
-                      """);
-        
-        try {
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, id); // Sử dụng biến kiểu int trong truy vấn
+                  where hd.ID = ?
+                  ORDER BY hdct.ngayTao DESC
+                  """);
 
-            rs = ps.executeQuery();
-            
-            while (rs.next()) {                
-                list.add(new HoaDonChiTietModel(rs.getInt(1), rs.getString(2), rs.getString(3), 
-                                                    rs.getString(4), rs.getString(5), rs.getString(6), 
-                                                    rs.getInt(7), rs.getInt(8), rs.getString(9), rs.getInt(10), 
-                                                    rs.getInt(11), rs.getInt(12)));}       
-        return list;
-        
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    try {
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, id); // Sử dụng biến kiểu int trong truy vấn
+
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            list.add(new HoaDonChiTietModel(rs.getInt(1), rs.getString(2), rs.getString(3),
+                                             rs.getString(4), rs.getString(5), rs.getString(6),
+                                             rs.getInt(7), rs.getInt(8), rs.getString(9), rs.getInt(10),
+                                             rs.getInt(11), rs.getInt(12)));
         }
+        return list;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
     }
+}
+
     
     public int UpdateSL(String ma,int soLuong) {
         
