@@ -613,25 +613,23 @@ public class BanHang {
    public void xuatHoaDon(String ma, String tenKh, String sdt, String tongTien, String maVoucher, String giam, String thanhTien, boolean in) {
     String fileName = "E://DuAn1//" + ma + ".pdf";
     String fontPath = "C:/Windows/Fonts/Arial.ttf";
-    // Thông tin công ty
     String companyName = "Sneaker Squad";
     String companyAddress = "Mỹ Đình - Quận Nam Từ Niêm";
     String companyPhone = "0984184412";
     String companyLogo = "E://DuAn1//banner.png";
-
-    // Thông tin khách hàng
+    
     LocalDate today = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'tháng' MM 'năm' yyyy");
     String invoiceDate = "Ngày " + today.format(formatter);
 
-    // Loại bỏ ký tự không phải số (ví dụ "HD" trong "HD004")
+    
     String numericPart = ma.replaceAll("[^0-9]", "");
     int id = 0;
     try {
-        id = Integer.parseInt(numericPart); // Chuyển đổi phần số của mã thành int
+        id = Integer.parseInt(numericPart); 
     } catch (NumberFormatException e) {
-        // Xử lý trường hợp mã không hợp lệ
-        JFrame frame = new JFrame();  // Khởi tạo JFrame (nếu chưa có)
+        
+        JFrame frame = new JFrame();  
         JOptionPane.showMessageDialog(frame, "Mã hóa đơn không hợp lệ: " + ma);
         return;
     }
@@ -639,7 +637,7 @@ public class BanHang {
     ArrayList<HoaDonChiTietModel> list = getAllHoaDon(id);
     
     if (list == null || list.isEmpty()) {
-        JFrame frame = new JFrame();  // Khởi tạo JFrame (nếu chưa có)
+        JFrame frame = new JFrame();  
         JOptionPane.showMessageDialog(frame, "Không có hóa đơn với mã " + ma);
         return;
     }
