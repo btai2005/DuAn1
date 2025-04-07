@@ -251,7 +251,7 @@ public class KhachHangPanel extends javax.swing.JPanel {
         if (!tenKH.isEmpty() && !sdtKH.isEmpty()) {
             if (tblKhachHang.getSelectedRow() != -1) {
                 if (tenKH.equals(tblKhachHang.getValueAt(tblKhachHang.getSelectedRow(), 2).toString())
-                        && sdtKH.equals(tblKhachHang.getValueAt(tblKhachHang.getSelectedRow(), 3).toString())) {
+                    && sdtKH.equals(tblKhachHang.getValueAt(tblKhachHang.getSelectedRow(), 3).toString())) {
 
                     ten.setText(tenKH);
                     soDienThoai.setText(sdtKH);

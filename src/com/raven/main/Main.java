@@ -5,9 +5,11 @@ import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import view.HoaDon;
-import view.SanPham1;
+import view.KhachHangView;
+import view.NhanVienView;
 import view.SanPhamView;
 import view.TrangChu;
+import view.VoucherView;
 
 
 public class Main extends javax.swing.JFrame {
@@ -24,12 +26,18 @@ public class Main extends javax.swing.JFrame {
             if (index == 0) {
                     setForm(new TrangChu());
             } else if (index == 1) {
-                    setForm(new SanPham1());
+                    setForm(new SanPhamView());
             } else if (index == 2) {
-                    
+                    setForm(new NhanVienView());
             } else if (index == 3) {
-                setForm(new HoaDon());
-            } else {
+                    setForm(new HoaDon());
+            } else if (index == 4) {
+                setForm(new KhachHangView());
+            } else if (index == 5) {
+                
+            }else if (index == 6) {
+                setForm(new VoucherView());
+            }else{
                 int choice = JOptionPane.showConfirmDialog(null, "Bạn có muốn thoát không");
                 if (choice == 0) {
                     System.exit(0);
@@ -77,7 +85,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(menu2, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE))
+                    .addComponent(menu2, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE))
                 .addContainerGap())
         );
 

@@ -3,20 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package repository;
-
 import Utils.Dbconnection;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import model.MauSac;
-
 /**
  *
- * @author ADMIN
+ * @author Dang
  */
 public class RP_MauSac {
     private Connection conn;
@@ -139,13 +132,44 @@ public void update(MauSac ms) {
     return false;
 }
     
+    public String getTenMauSac(int idMauSac) {
+        String sql = "SELECT TenMau FROM MauSac WHERE ID = ?";
+        try (
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idMauSac);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("TenMau");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Không xác định";
+    }
+    
+    public boolean isUsedInSanPhamChiTiet(int idMauSac) {
+    String sql = "SELECT COUNT(*) FROM SanPhamChiTiet WHERE IdMauSac = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, idMauSac);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+    
     // Thêm phương thức hide
-    public void hide(int id) {
+    public boolean hide(int id) {
         String SQL = "UPDATE MauSac SET TrangThai = 1, NgaySua = GETDATE() WHERE ID = ?";
         try {
             PreparedStatement ps = this.conn.prepareStatement(SQL);
             ps.setInt(1, id);
-            ps.execute();
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi khi ẩn màu sắc: " + e.getMessage());
         }
@@ -168,4 +192,35 @@ public void update(MauSac ms) {
         }
         return ds;
     }
+    
+    public ArrayList<Object[]> getAllHidden() {
+    ArrayList<Object[]> list = new ArrayList<>();
+    String sql = "SELECT ID, MaMauSac, TenMau FROM MauSac WHERE TrangThai = 1";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Object[]{
+                rs.getInt("ID"),
+                rs.getString("MaMauSac"),
+                rs.getString("TenMau")
+            });
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi lấy danh sách màu sắc ẩn: " + e.getMessage(), e);
+    }
+    return list;
+}
+
+public boolean show(int id) {
+    String sql = "UPDATE MauSac SET TrangThai = 0, NgaySua = GETDATE() WHERE ID = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi hiển thị lại màu sắc: " + e.getMessage(), e);
+    }
+}
 }

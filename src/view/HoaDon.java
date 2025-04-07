@@ -7,11 +7,9 @@ package view;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +24,7 @@ import javax.swing.table.TableCellRenderer;
 import model.HoaDonChiTietModel;
 import model.HoaDonModel;
 import model.SanPhamChiTiet;
+import model.SanPhamChiTiet1;
 import repository.BanHang;
 import repository.HoaDonChiTietRepo;
 import repository.HoaDonRepo;
@@ -36,6 +35,9 @@ import repository.HoaDonRepo;
  */
 public class HoaDon extends javax.swing.JPanel {
 
+    /**
+     * Creates new form HoaDon
+     */
     private BanHang qLy = new BanHang();
     DefaultTableModel defaultTableModel;
     BanHang repo = new BanHang();
@@ -264,6 +266,11 @@ public class HoaDon extends javax.swing.JPanel {
         jLabel39.setText("Giảm:");
 
         txtGiamGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtGiamGia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGiamGiaActionPerformed(evt);
+            }
+        });
 
         jLabel40.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel40.setText("Thành Tiền:");
@@ -621,9 +628,6 @@ public class HoaDon extends javax.swing.JPanel {
             }
         });
         jScrollPane7.setViewportView(tblsanpham);
-        if (tblsanpham.getColumnModel().getColumnCount() > 0) {
-            tblsanpham.getColumnModel().getColumn(0).setPreferredWidth(50);
-        }
 
         btnTimKiem.setBackground(new java.awt.Color(153, 0, 0));
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -650,7 +654,7 @@ public class HoaDon extends javax.swing.JPanel {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel51)
-                        .addContainerGap(625, Short.MAX_VALUE))
+                        .addContainerGap(616, Short.MAX_VALUE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
@@ -665,7 +669,7 @@ public class HoaDon extends javax.swing.JPanel {
                 .addGroup(jPanel9Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(737, Short.MAX_VALUE)))
+                    .addContainerGap(728, Short.MAX_VALUE)))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1126,7 +1130,7 @@ public class HoaDon extends javax.swing.JPanel {
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, 1116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1144,7 +1148,7 @@ public class HoaDon extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1149, Short.MAX_VALUE)
+            .addGap(0, 1140, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -1162,9 +1166,18 @@ public class HoaDon extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        this.updateSoLuong();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        this.updateTrangThai();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     private void btChonKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btChonKhachHangActionPerformed
 
-                this.frameKhachHang("Khách Hàng");
+        this.frameKhachHang("Khách Hàng");
     }//GEN-LAST:event_btChonKhachHangActionPerformed
 
     private void btnHuyKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyKhachHangActionPerformed
@@ -1174,17 +1187,17 @@ public class HoaDon extends javax.swing.JPanel {
 
     private void btnVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoucherActionPerformed
 
-                this.frameVoucher("Voucher");
+        this.frameVoucher("Voucher");
     }//GEN-LAST:event_btnVoucherActionPerformed
 
     private void btnApDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApDungActionPerformed
 
-                this.inputThanhTien(true);
+        this.inputThanhTien(true);
     }//GEN-LAST:event_btnApDungActionPerformed
 
     private void btnHuyVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyVoucherActionPerformed
 
-        //        this.huyVoucher();
+                this.huyVoucher();
     }//GEN-LAST:event_btnHuyVoucherActionPerformed
 
     private void txtTienMatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTienMatKeyPressed
@@ -1225,6 +1238,10 @@ public class HoaDon extends javax.swing.JPanel {
 
         this.chuyenKhoan();
     }//GEN-LAST:event_txtChuyenKhoanKeyTyped
+
+    private void txtTienDuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTienDuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTienDuActionPerformed
 
     private void btnHoanTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHoanTienActionPerformed
 
@@ -1290,16 +1307,15 @@ public class HoaDon extends javax.swing.JPanel {
                 }
             }
         }
-
     }//GEN-LAST:event_btnHoanTienActionPerformed
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-        this.thanhToan();        
+        this.thanhToan();
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInHoaDonActionPerformed
 
-                this.inHoaDon(jblMaHoaDon.getText(), true);
+        this.inHoaDon(jblMaHoaDon.getText(), true);
     }//GEN-LAST:event_btnInHoaDonActionPerformed
 
     private void btnTaoHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHoaDonActionPerformed
@@ -1307,46 +1323,38 @@ public class HoaDon extends javax.swing.JPanel {
         this.createHoaDon();
     }//GEN-LAST:event_btnTaoHoaDonActionPerformed
 
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tblHoaDonMouseClicked
+
+    private void tblHoaDonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMousePressed
+
+    }//GEN-LAST:event_tblHoaDonMousePressed
+
     private void tblHoaDonChoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonChoMouseClicked
 
         showData(tblHoaDon.getSelectedRow());
     }//GEN-LAST:event_tblHoaDonChoMouseClicked
-
-    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-
-        fillTableSp();
-    }//GEN-LAST:event_btnTimKiemActionPerformed
-
-    private void txtTienDuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTienDuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTienDuActionPerformed
 
     private void tblsanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblsanphamMouseClicked
 
         this.chonSanPham();
     }//GEN-LAST:event_tblsanphamMouseClicked
 
-    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_tblHoaDonMouseClicked
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
 
-    private void tblHoaDonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMousePressed
-        
-    }//GEN-LAST:event_tblHoaDonMousePressed
+        fillTableSp();
+    }//GEN-LAST:event_btnTimKiemActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        this.updateSoLuong();
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
-        this.updateTrangThai();
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+        this.fillTableHoaDon();
+    }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void txtSearchMaHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchMaHoaDonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchMaHoaDonActionPerformed
+    private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
+        this.fillTableHoaDon();
+    }//GEN-LAST:event_btnLocActionPerformed
 
     private void tblLichSuHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichSuHoaDonMouseClicked
 
@@ -1354,14 +1362,13 @@ public class HoaDon extends javax.swing.JPanel {
         this.fillTableHoaDonCT(getLichSuHoaDon(tblLichSuHoaDon.getSelectedRow()).getId());
     }//GEN-LAST:event_tblLichSuHoaDonMouseClicked
 
-    private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
-        this.fillTableHoaDon();
-    }//GEN-LAST:event_btnLocActionPerformed
+    private void txtSearchMaHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchMaHoaDonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchMaHoaDonActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-
-        this.fillTableHoaDon();
-    }//GEN-LAST:event_btnSearchActionPerformed
+    private void txtGiamGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiamGiaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtGiamGiaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1461,7 +1468,6 @@ public class HoaDon extends javax.swing.JPanel {
     private javax.swing.JTextField txtTienMat;
     private javax.swing.JTextField txtTongTien;
     // End of variables declaration//GEN-END:variables
-
     public void fillTableHoaDonCho() {
         DefaultTableModel tblModel = (DefaultTableModel) tblHoaDonCho.getModel();
         tblModel.setRowCount(0);
@@ -1531,36 +1537,47 @@ public class HoaDon extends javax.swing.JPanel {
     }
 
     public void inputThanhTien(boolean tb) {
-        if (txtTongTien.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Chọn hóa đơn cần áp Voucher");
-        } else if (txtMaVoucher.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Chưa chọn mã Voucher nào!");
+    if (txtTongTien.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Chọn hóa đơn cần áp Voucher");
+    } else if (txtMaVoucher.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Chưa chọn mã Voucher nào!");
+    } else {
+        String tongTienStr = txtTongTien.getText().replace(".", "").replace(",", "");
+        String giamGiaStr = txtGiamGia.getText();
+
+        int spaceIndex = giamGiaStr.indexOf(" ");
+        if (spaceIndex == -1) {
+            JOptionPane.showMessageDialog(this, "Định dạng giảm giá không hợp lệ!");
+            return;
+        }
+
+        long tong = Long.parseLong(tongTienStr);
+        int giam = Integer.parseInt(giamGiaStr.substring(0, spaceIndex));
+
+        long thanhTien;
+        if (giamGiaStr.contains("%")) {
+            thanhTien = tong - ((tong * giam) / 100);
         } else {
-            String tongTien = txtTongTien.getText().replace(".", "");
-            int spaceIndex = txtGiamGia.getText().indexOf(" ");
+            thanhTien = tong - giam;
+        }
 
-            long tong = Long.parseLong(tongTien);
-            int giam = Integer.parseInt(txtGiamGia.getText().substring(0, spaceIndex));
+        if (thanhTien < 0) {
+            thanhTien = 0;
+        }
 
-            long thanhTien;
-            if (txtGiamGia.getText().contains("%")) {
+        DecimalFormat format = new DecimalFormat("#,###");
+        String numberFormat = format.format(thanhTien);
 
-                thanhTien = tong - ((tong / 100) * giam);
-            } else {
+        txtThanhTien.setText(numberFormat);
+        txtTienMat.setText(null);
+        txtChuyenKhoan.setText(null);
 
-                thanhTien = Integer.parseInt(tongTien) - Integer.parseInt(txtGiamGia.getText().substring(0, spaceIndex));
-            }
-            DecimalFormat format = new DecimalFormat("#,###");
-            String numberFormat = format.format(thanhTien);
-
-            txtThanhTien.setText(numberFormat);
-            txtTienMat.setText(null);
-            txtChuyenKhoan.setText(null);
-            if (tb) {
-                JOptionPane.showMessageDialog(this, "Đã áp dụng Voucher thành công");
-            }
+        if (tb) {
+            JOptionPane.showMessageDialog(this, "Đã áp dụng Voucher thành công");
         }
     }
+}
+
 
     public void inputThanhToan(JTextField txtTtLoai1, JTextField txtTtLoai2) {
 
@@ -1768,7 +1785,7 @@ public class HoaDon extends javax.swing.JPanel {
         defaultTableModel = (DefaultTableModel) tblsanpham.getModel();
         defaultTableModel.setRowCount(0);
         tblsanpham.setRowHeight(85);
-        for (SanPhamChiTiet sp : repo.getDataTableSp(txtSearch.getText())) {
+        for (SanPhamChiTiet1 sp : repo.getDataTableSp(txtSearch.getText())) {
             defaultTableModel.addRow(sp.getData());
         }
         tblsanpham.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer());
@@ -1977,7 +1994,7 @@ private void chonSanPham() {
     }
 
     // Tiếp tục nếu đã chọn hóa đơn và sản phẩm
-    SanPhamChiTiet spct = getSPCT(selectedRow);
+    SanPhamChiTiet1 spct = getSPCT(selectedRow);
     HoaDonModel hd = getHoaDon(hoaDonSelected);
 
     String soLuongStr = JOptionPane.showInputDialog(this, "Nhập số lượng:");
@@ -2073,7 +2090,6 @@ public void frameKhachHang(String title) {
 }
 
 public void createFromKhachHang() {
-    // Lấy chỉ số dòng đã chọn từ bảng
     int index = tblHoaDonCho.getSelectedRow();
 
     // Kiểm tra nếu không có dòng nào được chọn
@@ -2082,32 +2098,27 @@ public void createFromKhachHang() {
         return;
     }
 
-    // Lấy hóa đơn đã chọn từ bảng
-    HoaDonModel selectedHoaDon = qLy.getAllHoaDonCho().get(index);
     
-    // Tạo cửa sổ mới để hiển thị thông tin khách hàng
+    HoaDonModel selectedHoaDon = qLy.getAllHoaDonCho().get(index);
     String title = "Thông tin khách hàng";
     JFrame frame = new JFrame(title);
     frame.setSize(617, 540);
     frame.setLocationRelativeTo(null);
-
-    // Tạo panel KhachHangPanel và truyền các tham số cần thiết
     KhachHangPanel kh = new KhachHangPanel(
         frame,
         txtTenKhachHang, 
         txtSoDienThoai,
-        index, // Chỉ số dòng đã chọn
-        selectedHoaDon.getId(), // ID hóa đơn đã chọn
-        tblHoaDonCho // Truyền bảng hóa đơn cho panel
+        index,
+        selectedHoaDon.getId(), 
+        tblHoaDonCho 
     );
 
-    // Thêm panel vào frame và hiển thị
     frame.add(kh);
     frame.setVisible(true);
 }
 
 
-    public SanPhamChiTiet getSPCT(int index) {
+    public SanPhamChiTiet1 getSPCT(int index) {
         return repo.getDataTableSp(txtSearch.getText()).get(index);
     }
     

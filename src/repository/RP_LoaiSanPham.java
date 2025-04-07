@@ -3,20 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package repository;
-
 import Utils.Dbconnection;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import model.LoaiSanPham;
-
 /**
  *
- * @author ADMIN
+ * @author Dang
  */
 public class RP_LoaiSanPham {
     private Connection conn;
@@ -139,13 +132,43 @@ public void update(LoaiSanPham lsp) {
     return false;
 }
     
+    public String getTenLoaiSanPham(int idLoaiSanPham) {
+        String sql = "SELECT TenLoaiSanPham FROM LoaiSanPham WHERE Id = ?";
+        try (
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idLoaiSanPham);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("TenLoaiSanPham");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Không xác định";
+    }
+    
+    public boolean isUsedInSanPhamChiTiet(int idLoaiSanPham) {
+    String sql = "SELECT COUNT(*) FROM SanPhamChiTiet WHERE IdLoaiSanPham = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, idLoaiSanPham);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
     // Thêm phương thức hide
-    public void hide(int id) {
+    public boolean hide(int id) {
         String SQL = "UPDATE LoaiSanPham SET TrangThai = 1, NgaySua = GETDATE() WHERE ID = ?";
         try {
             PreparedStatement ps = this.conn.prepareStatement(SQL);
             ps.setInt(1, id);
-            ps.execute();
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi khi ẩn loại sản phẩm: " + e.getMessage());
         }
@@ -168,4 +191,35 @@ public void update(LoaiSanPham lsp) {
         }
         return ds;
     }
+    
+    public ArrayList<Object[]> getAllHidden() {
+    ArrayList<Object[]> list = new ArrayList<>();
+    String sql = "SELECT ID, MaLoaiSanPham, TenLoaiSanPham FROM LoaiSanPham WHERE TrangThai = 1";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Object[]{
+                rs.getInt("ID"),
+                rs.getString("MaLoaiSanPham"),
+                rs.getString("TenLoaiSanPham")
+            });
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi lấy danh sách loại sản phẩm ẩn: " + e.getMessage(), e);
+    }
+    return list;
+}
+
+public boolean show(int id) {
+    String sql = "UPDATE LoaiSanPham SET TrangThai = 0, NgaySua = GETDATE() WHERE ID = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi hiển thị lại loại sản phẩm: " + e.getMessage(), e);
+    }
+}
 }

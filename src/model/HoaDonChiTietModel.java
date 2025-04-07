@@ -12,7 +12,6 @@ import java.util.Locale;
  * @author ADMIN
  */
 public class HoaDonChiTietModel {
-
     private int id;
     private String ma;
     private String ten;
@@ -159,7 +158,6 @@ public class HoaDonChiTietModel {
         double gia = getGia();
         int soLuong = getSoLuong();
         double thanhTien = gia * soLuong;
-
         String giaFormatted = currencyFormat.format(gia);
         String thanhTienFormatted = currencyFormat.format(thanhTien);
 
@@ -171,5 +169,4 @@ public class HoaDonChiTietModel {
             thanhTienFormatted 
         };
     }
-
 }

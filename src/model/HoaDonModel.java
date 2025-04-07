@@ -12,7 +12,6 @@ import java.util.Locale;
  * @author ADMIN
  */
 public class HoaDonModel {
-
     private int id;
     private String maHoaDon;
     private String loaiThanhToan;
@@ -167,11 +166,11 @@ public class HoaDonModel {
     public Object[] toDataRow() {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         String tongTienFormatted = currencyFormat.format(getTongTien());
-
+        String ten = getTenKhachHang() != null ? getTenKhachHang() : "Khách Vãng Lai";
         return new Object[]{
             getMaHoaDon(),
             getTenNhanVien(),
-            getTenKhachHang(),
+            ten,
             getThoiGianTao(),
             getTrangThai() == 1 ? "Chưa Thanh Toán" : "Đã Thanh Toán",
             tongTienFormatted

@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  *
- * @author ADMIN
+ * @author Dang
  */
 public class NhaSanXuat {
     private int id;                  
@@ -82,4 +82,6 @@ public class NhaSanXuat {
     public String toString() {
         return "NhaSanXuat{" + "id=" + id + ", maNSX=" + maNSX + ", tenNSX=" + tenNSX + ", ngayTao=" + ngayTao + ", ngaySua=" + ngaySua + ", trangThai=" + trangThai + '}';
     }
+    
+    
 }

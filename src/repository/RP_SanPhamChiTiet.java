@@ -3,23 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package repository;
-
 import Utils.Dbconnection;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.SanPhamChiTiet;
-import model.SanPhamChiTiet1;
-
 /**
  *
- * @author ADMIN
+ * @author Dang
  */
 public class RP_SanPhamChiTiet {
     private Connection conn;
@@ -28,10 +20,10 @@ public class RP_SanPhamChiTiet {
         this.conn = Dbconnection.getConnection();
     }
     
-    public ArrayList<SanPhamChiTiet1> search() {
+    public ArrayList<SanPhamChiTiet> search() {
         String SQL = "SELECT * FROM SanPhamChiTiet WHERE TrangThai = 0";
         
-        ArrayList<SanPhamChiTiet1> ds = new ArrayList<>();
+        ArrayList<SanPhamChiTiet> ds = new ArrayList<>();
         
         try {
             PreparedStatement ps = this.conn.prepareStatement(SQL);
@@ -63,7 +55,7 @@ public class RP_SanPhamChiTiet {
                     trangThai = 0; // Giá trị mặc định nếu TrangThai là NULL
                 }
                 
-                SanPhamChiTiet1 spct = new SanPhamChiTiet1(id, maSanPhamChiTiet, tenSanPhamChiTiet, giaSanPham, anhSanPham, soLuong, moTa, idChatLieu, idKichCo, idMauSac, idNSX, idLoaiSanPham, trangThai, ngayTao, ngaySua);
+                SanPhamChiTiet spct = new SanPhamChiTiet(id, maSanPhamChiTiet, tenSanPhamChiTiet, giaSanPham, anhSanPham, soLuong, moTa, idChatLieu, idKichCo, idMauSac, idNSX, idLoaiSanPham, trangThai, ngayTao, ngaySua);
                 ds.add(spct);
             }
             
@@ -77,7 +69,7 @@ public class RP_SanPhamChiTiet {
         }
     }
     
-    public void create(SanPhamChiTiet1 spct) {
+    public void create(SanPhamChiTiet spct) {
     String SQL = "INSERT INTO SanPhamChiTiet(MaSanPhamChiTiet, TenSanPhamChiTiet, GiaSanPham, AnhSanPham, SoLuong, MoTa, IdChatLieu, IdKichCo, IdMauSac, IdNSX, IdLoaiSanPham) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
     try {
         PreparedStatement ps = this.conn.prepareStatement(SQL);
@@ -99,7 +91,7 @@ public class RP_SanPhamChiTiet {
     }
 }
 
-public void update(SanPhamChiTiet1 spct) {
+public void update(SanPhamChiTiet spct) {
     String SQL = "UPDATE SanPhamChiTiet SET MaSanPhamChiTiet = ?, TenSanPhamChiTiet = ?, GiaSanPham = ?, AnhSanPham = ?, SoLuong = ?, MoTa = ?, IdChatLieu = ?, IdKichCo = ?, IdMauSac = ?, IdNSX = ?, IdLoaiSanPham = ?, NgaySua = GETDATE() WHERE ID = ?";
     try {
         PreparedStatement ps = this.conn.prepareStatement(SQL);
@@ -181,8 +173,8 @@ public void update(SanPhamChiTiet1 spct) {
         }
     }
     
-    public List<SanPhamChiTiet1> searchHidden() {
-    List<SanPhamChiTiet1> list = new ArrayList<>();
+    public List<SanPhamChiTiet> searchHidden() {
+    List<SanPhamChiTiet> list = new ArrayList<>();
     String sql = """
         SELECT * FROM SanPhamChiTiet
         WHERE TrangThai = 1
@@ -191,7 +183,7 @@ public void update(SanPhamChiTiet1 spct) {
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            SanPhamChiTiet1 spct = new SanPhamChiTiet1();
+            SanPhamChiTiet spct = new SanPhamChiTiet();
             spct.setId(rs.getInt("Id"));
             spct.setMaSanPhamChiTiet(rs.getString("MaSanPhamChiTiet"));
             spct.setTenSanPhamChiTiet(rs.getString("TenSanPhamChiTiet"));

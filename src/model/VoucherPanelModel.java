@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author ADMIN
@@ -70,4 +72,5 @@ public class VoucherPanelModel {
     public Object[] toDataRow() {
         return new Object[] {getId(), getMa(), getTen(), getLoai(), getGiam()};
     }
+
 }

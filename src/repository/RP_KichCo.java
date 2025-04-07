@@ -3,21 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package repository;
-
 import Utils.Dbconnection;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import model.KichCo;
-
 /**
  *
- * @author ADMIN
+ * @author Dang
  */
 public class RP_KichCo {
     private Connection conn;
@@ -138,13 +131,44 @@ public void update(KichCo kc) {
     return false;
 }
     
+    public String getSizeKichCo(int idKichCo) {
+        String sql = "SELECT Size FROM KichCo WHERE Id = ?";
+        try (
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idKichCo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("Size");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Không xác định";
+    }
+    
+    public boolean isUsedInSanPhamChiTiet(int idKichCo) {
+    String sql = "SELECT COUNT(*) FROM SanPhamChiTiet WHERE IdKichCo = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, idKichCo);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+    
     // Thêm phương thức hide
-    public void hide(int id) {
+    public boolean hide(int id) {
         String SQL = "UPDATE KichCo SET TrangThai = 1, NgaySua = GETDATE() WHERE ID = ?";
         try {
             PreparedStatement ps = this.conn.prepareStatement(SQL);
             ps.setInt(1, id);
-            ps.execute();
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi khi ẩn kích cỡ: " + e.getMessage());
         }
@@ -167,4 +191,35 @@ public void update(KichCo kc) {
         }
         return ds;
     }
+    
+    public ArrayList<Object[]> getAllHidden() {
+    ArrayList<Object[]> list = new ArrayList<>();
+    String sql = "SELECT ID, MaKichCo, Size FROM KichCo WHERE TrangThai = 1";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Object[]{
+                rs.getInt("ID"),
+                rs.getString("MaKichCo"),
+                rs.getString("Size")
+            });
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi lấy danh sách kích cỡ ẩn: " + e.getMessage(), e);
+    }
+    return list;
+}
+
+public boolean show(int id) {
+    String sql = "UPDATE KichCo SET TrangThai = 0, NgaySua = GETDATE() WHERE ID = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi hiển thị lại kích cỡ: " + e.getMessage(), e);
+    }
+}
 }

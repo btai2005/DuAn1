@@ -4,37 +4,39 @@
  */
 package model;
 
+import java.awt.Image;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author ADMIN
  */
 public class SanPhamChiTiet1 {
-    private int id;                    
-    private String maSanPhamChiTiet;   
-    private String tenSanPhamChiTiet;  
-    private BigDecimal giaSanPham;     
-    private String anhSanPham;         
-    private int soLuong;               
-    private String moTa;               
-    private int idChatLieu;                       
-    private int idKichCo;              
+    private int id;
+    private String maSanPhamChiTiet;
+    private String tenSanPhamChiTiet;
+    private BigDecimal giaSanPham;
+    private String anhSanPham;
+    private int soLuong;
+    private String moTa;
+    private int idChatLieu;
+    private int idKichCo;
     private int idMauSac;
-    private int idNSX;
-    private int idLoaiSanPham;             
-    private int trangThai;             
-    private Date ngayTao;              
+    private int idLoaiSanPham;
+    private int trangThai;
+    private String tenMau;
+    private int kichCo;
+    private Date ngayTao;
     private Date ngaySua;
-    
-    
 
-    public SanPhamChiTiet1(){
-        
+    public SanPhamChiTiet1() {
     }
 
-    public SanPhamChiTiet1(int id, String maSanPhamChiTiet, String tenSanPhamChiTiet, BigDecimal giaSanPham, String anhSanPham, int soLuong, String moTa, int idChatLieu, int idKichCo, int idMauSac, int idNSX, int idLoaiSanPham, int trangThai, Date ngayTao, Date ngaySua) {
+    public SanPhamChiTiet1(int id, String maSanPhamChiTiet, String tenSanPhamChiTiet, BigDecimal giaSanPham, String anhSanPham, int soLuong, String moTa, int idChatLieu, int idKichCo, int idMauSac, int idLoaiSanPham, int trangThai, Date ngayTao, Date ngaySua) {
         this.id = id;
         this.maSanPhamChiTiet = maSanPhamChiTiet;
         this.tenSanPhamChiTiet = tenSanPhamChiTiet;
@@ -45,11 +47,20 @@ public class SanPhamChiTiet1 {
         this.idChatLieu = idChatLieu;
         this.idKichCo = idKichCo;
         this.idMauSac = idMauSac;
-        this.idNSX = idNSX;
         this.idLoaiSanPham = idLoaiSanPham;
         this.trangThai = trangThai;
         this.ngayTao = ngayTao;
         this.ngaySua = ngaySua;
+    }
+
+    public SanPhamChiTiet1(int id, String tenSanPhamChiTiet, BigDecimal giaSanPham, String anhSanPham, int soLuong, String tenMau, int kichCo) {
+        this.id = id;
+        this.tenSanPhamChiTiet = tenSanPhamChiTiet;
+        this.giaSanPham = giaSanPham;
+        this.anhSanPham = anhSanPham;
+        this.soLuong = soLuong;
+        this.tenMau = tenMau;
+        this.kichCo = kichCo;
     }
 
     public int getId() {
@@ -132,14 +143,6 @@ public class SanPhamChiTiet1 {
         this.idMauSac = idMauSac;
     }
 
-    public int getIdNSX() {
-        return idNSX;
-    }
-
-    public void setIdNSX(int idNSX) {
-        this.idNSX = idNSX;
-    }
-
     public int getIdLoaiSanPham() {
         return idLoaiSanPham;
     }
@@ -172,8 +175,44 @@ public class SanPhamChiTiet1 {
         this.ngaySua = ngaySua;
     }
 
+    public String getTenMau() {
+        return tenMau;
+    }
+
+    public void setTenMau(String tenMau) {
+        this.tenMau = tenMau;
+    }
+
+    public int getKichCo() {
+        return kichCo;
+    }
+
+    public void setKichCo(int kichCo) {
+        this.kichCo = kichCo;
+    }
+
     @Override
     public String toString() {
-        return "SanPhamChiTiet{" + "id=" + id + ", maSanPhamChiTiet=" + maSanPhamChiTiet + ", tenSanPhamChiTiet=" + tenSanPhamChiTiet + ", giaSanPham=" + giaSanPham + ", anhSanPham=" + anhSanPham + ", soLuong=" + soLuong + ", moTa=" + moTa + ", idChatLieu=" + idChatLieu + ", idKichCo=" + idKichCo + ", idMauSac=" + idMauSac + ", idNSX=" + idNSX + ", idLoaiSanPham=" + idLoaiSanPham + ", trangThai=" + trangThai + ", ngayTao=" + ngayTao + ", ngaySua=" + ngaySua + '}';
+        return "SanPhamChiTiet{" + "id=" + id + ", maSanPhamChiTiet=" + maSanPhamChiTiet + ", tenSanPhamChiTiet=" + tenSanPhamChiTiet + ", giaSanPham=" + giaSanPham + ", anhSanPham=" + anhSanPham + ", soLuong=" + soLuong + ", moTa=" + moTa + ", idChatLieu=" + idChatLieu + ", idKichCo=" + idKichCo + ", idMauSac=" + idMauSac + ", idLoaiSanPham=" + idLoaiSanPham + ", trangThai=" + trangThai + ", ngayTao=" + ngayTao + ", ngaySua=" + ngaySua + '}';
+    }
+
+    private ImageIcon resizeImage(String path, int width, int height) {
+        ImageIcon icon = new ImageIcon(path);
+        Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
+
+    public Object[] getData() {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String giaFormatted = currencyFormat.format(getGiaSanPham());
+
+        return new Object[]{
+            resizeImage(getAnhSanPham(), 80, 80),
+            getTenSanPhamChiTiet(),
+            giaFormatted,
+            getSoLuong(),
+            getKichCo(),
+            getTenMau()
+        };
     }
 }

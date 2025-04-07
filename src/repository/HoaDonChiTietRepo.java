@@ -16,7 +16,6 @@ import model.HoaDonChiTietModel;
  * @author ADMIN
  */
 public class HoaDonChiTietRepo {
-    
     private Connection conn;
     private PreparedStatement ps;
     private ResultSet rs;

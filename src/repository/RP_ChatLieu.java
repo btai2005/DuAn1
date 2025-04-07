@@ -3,20 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package repository;
-
 import Utils.Dbconnection;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import model.ChatLieu;
-
 /**
  *
- * @author ADMIN
+ * @author Dang
  */
 public class RP_ChatLieu {
     private Connection conn;
@@ -131,13 +124,44 @@ public void update(ChatLieu cl) {
     return false;
 }
     
+    public String getTenChatLieu(int idChatLieu) {
+        String sql = "SELECT TenChatLieu FROM ChatLieu WHERE ID = ?";
+        try (
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idChatLieu);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("TenChatLieu");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "Không xác định";
+    }
+    
+    public boolean isUsedInSanPhamChiTiet(int idChatLieu) {
+    String sql = "SELECT COUNT(*) FROM SanPhamChiTiet WHERE IdChatLieu = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, idChatLieu);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+    
     // Thêm phương thức hide
-    public void hide(int id) {
+    public boolean hide(int id) {
         String SQL = "UPDATE ChatLieu SET TrangThai = 1, NgaySua = GETDATE() WHERE ID = ?";
         try {
             PreparedStatement ps = this.conn.prepareStatement(SQL);
             ps.setInt(1, id);
-            ps.execute();
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi khi ẩn chất liệu: " + e.getMessage());
         }
@@ -160,4 +184,35 @@ public void update(ChatLieu cl) {
         }
         return ds;
     }
+    
+    public ArrayList<Object[]> getAllHidden() {
+    ArrayList<Object[]> list = new ArrayList<>();
+    String sql = "SELECT ID, MaChatLieu, TenChatLieu FROM ChatLieu WHERE TrangThai = 1";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Object[]{
+                rs.getInt("ID"),
+                rs.getString("MaChatLieu"),
+                rs.getString("TenChatLieu")
+            });
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi lấy danh sách chất liệu ẩn: " + e.getMessage(), e);
+    }
+    return list;
+}
+
+public boolean show(int id) {
+    String sql = "UPDATE ChatLieu SET TrangThai = 0, NgaySua = GETDATE() WHERE ID = ?";
+    try (
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi hiển thị lại chất liệu: " + e.getMessage(), e);
+    }
+}
 }

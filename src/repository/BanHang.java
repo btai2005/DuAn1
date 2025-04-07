@@ -15,7 +15,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -25,11 +24,9 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,13 +38,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import model.HoaDonChiTietModel;
 import model.HoaDonModel;
 import model.Model_SanPhamChiTiet;
 import model.SanPhamChiTiet;
+import model.SanPhamChiTiet1;
 
 /**
  *
@@ -211,8 +208,8 @@ public class BanHang {
         }
     }
     
-    public List<SanPhamChiTiet> getDataTableSp (String search) {
-        List<SanPhamChiTiet> list= new ArrayList<>();
+    public List<SanPhamChiTiet1> getDataTableSp (String search) {
+        List<SanPhamChiTiet1> list= new ArrayList<>();
         String query = """
                        Select spct.ID, AnhSanPham, TenSanPhamChiTiet, GiaSanPham, SoLuong, kc.Size, ms.TenMau
                        from SanPhamChiTiet spct
@@ -228,7 +225,7 @@ public class BanHang {
 
             rs = ps.executeQuery();
             while(rs.next()){
-                SanPhamChiTiet cd = new SanPhamChiTiet();
+                SanPhamChiTiet1 cd = new SanPhamChiTiet1();
                 cd.setId(rs.getInt(1));
                 cd.setAnhSanPham(rs.getString(2));
                 cd.setTenSanPhamChiTiet(rs.getString(3));
@@ -757,6 +754,4 @@ public class BanHang {
         e.printStackTrace();
     }
 }
-
-
 }
