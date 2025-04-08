@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import model.HoaDonChiTietModel;
@@ -748,9 +750,8 @@ public class BanHang {
             } else {
                 System.out.println("File not found.");
             }
-        }
-        
-    } catch (DocumentException | IOException e) {
+        }       
+    }catch (DocumentException | IOException e) {
         e.printStackTrace();
     }
 }

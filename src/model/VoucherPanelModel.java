@@ -63,6 +63,14 @@ public class VoucherPanelModel {
     public int getGiam() {
         return giam;
     }
+    
+//    public String getGiamStr() {
+//        if (loai.equals(KieuVoucher.TIEN_MAT)) {
+//            return giam + "VND";
+//        }
+//        // Phần trăm
+//        return giam + "%";
+//    }
 
     public void setGiam(int giam) {
         this.giam = giam;
@@ -70,7 +78,7 @@ public class VoucherPanelModel {
     
     
     public Object[] toDataRow() {
-        return new Object[] {getId(), getMa(), getTen(), getLoai(), getGiam()};
+        return new Object[] {getId(), getMa(), getTen(), getLoai(), giam};
     }
 
 }

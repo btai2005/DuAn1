@@ -23,7 +23,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import model.HoaDonChiTietModel;
 import model.HoaDonModel;
-import model.SanPhamChiTiet;
 import model.SanPhamChiTiet1;
 import repository.BanHang;
 import repository.HoaDonChiTietRepo;
@@ -928,11 +927,11 @@ public class HoaDon extends javax.swing.JPanel {
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel20Layout.createSequentialGroup()
                         .addComponent(jLabel64)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblLoaiThanhToan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(lblLoaiThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel20Layout.createSequentialGroup()
                         .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel63, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1320,7 +1319,17 @@ public class HoaDon extends javax.swing.JPanel {
 
     private void btnTaoHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHoaDonActionPerformed
 
-        this.createHoaDon();
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Bạn có chắc chắn muốn tạo hóa đơn mới không?",
+                "Xác nhận tạo hóa đơn",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            this.createHoaDon();
+        }
+
     }//GEN-LAST:event_btnTaoHoaDonActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
@@ -1690,6 +1699,9 @@ public class HoaDon extends javax.swing.JPanel {
         txtTienMat.setText(null);
         txtChuyenKhoan.setText(null);
         txtTienDu.setText(null);
+        jblMaHoaDon.setText("#####");
+        txtMaVoucher.setText(null);
+        txtGiamGia.setText(null);
         fillTableHoaDonCho();
         fillTableHoaDon();
         DefaultTableModel tblModel = (DefaultTableModel) tblHoaDon.getModel();
@@ -1848,15 +1860,14 @@ public class HoaDon extends javax.swing.JPanel {
     public void createHoaDon() {
         DefaultTableModel tblModel = (DefaultTableModel) tblHoaDonCho.getModel();
         tblModel.setRowCount(0);
-
-//        jTabbedPane1.setTitleAt(0, qLy.createMaHoaDon());
+        jTabbedPane5.setTitleAt(0, qLy.createMaHoaDon());
         jblMaHoaDon.setText(qLy.createMaHoaDon());
-        txtTenKhachHang.setText("Khách Vãng Lai");
         DefaultTableModel tblModelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
         tblModelHoaDon.setRowCount(0);
         qLy.themHoaDonMoi(idNhanVien);
         fillTableHoaDonCho();
         cleanTextKhachHang();
+        txtTenKhachHang.setText("Khách Vãng Lai");
         cleanTextVoucher();
         tblHoaDonCho.setRowSelectionInterval(tblHoaDonCho.getRowCount() - 1, tblHoaDonCho.getRowCount() - 1);
 
