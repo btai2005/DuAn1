@@ -267,9 +267,9 @@ private VoucherPanelRepo qLy = new VoucherPanelRepo();
 
                     ma.setText(txtMa.getText());
                     if (cboLoai.getSelectedIndex() == 0) {
-                        giam.setText(txtGiam.getText().trim() + " VNĐ");
+                        giam.setText(txtGiam.getText().trim());
                     } else {
-                        giam.setText(txtGiam.getText().trim() + " %");
+                        giam.setText(txtGiam.getText().trim());
                     }
                     qLy.suaVoucherHoaDon(qLy.getAll(txtSearch.getText(), cboSearch.getSelectedItem().toString()).get(tblVoucher.getSelectedRow()).getId(), idHd);
 

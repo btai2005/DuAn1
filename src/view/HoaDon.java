@@ -938,8 +938,8 @@ public class HoaDon extends javax.swing.JPanel {
                             .addComponent(jLabel62, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(23, 23, 23)
                         .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblThoiGianTao, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblSoDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblSoDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblThoiGianTao, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel20Layout.createSequentialGroup()
                         .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1329,7 +1329,7 @@ public class HoaDon extends javax.swing.JPanel {
         if (confirm == JOptionPane.YES_OPTION) {
             this.createHoaDon();
         }
-
+        
     }//GEN-LAST:event_btnTaoHoaDonActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
@@ -1515,6 +1515,9 @@ public class HoaDon extends javax.swing.JPanel {
             txtTenKhachHang.setText("Khách Vãng Lai");
             txtSoDienThoai.setText(null);
         }
+        cleanTextKhachHang();
+        cleanTextVoucher();
+        cleanTextThanhToan();
 
 //        VoucherModel voucherModel = voucherRepo.getIdVoucher(qLy.getAllHoaDonCho().get(indexHdC).getIdVoucher());
 //        if (voucherModel.getMaVoucher() != null) {
@@ -1792,7 +1795,10 @@ public class HoaDon extends javax.swing.JPanel {
         txtTenKhachHang.setText(null);
         txtSoDienThoai.setText(null);
     }
-
+    public void cleanTextThanhToan(){
+        txtTienDu.setText(null);
+        txtTienMat.setText(null);
+    }
     public void fillTableSp() {
         defaultTableModel = (DefaultTableModel) tblsanpham.getModel();
         defaultTableModel.setRowCount(0);
@@ -1870,8 +1876,8 @@ public class HoaDon extends javax.swing.JPanel {
         txtTenKhachHang.setText("Khách Vãng Lai");
         cleanTextVoucher();
         tblHoaDonCho.setRowSelectionInterval(tblHoaDonCho.getRowCount() - 1, tblHoaDonCho.getRowCount() - 1);
-
         JOptionPane.showMessageDialog(this, "Tạo hóa đơn thành công");
+        fillTableHoaDon();
     }
 
     //HÓA ĐƠN
@@ -1915,32 +1921,31 @@ public class HoaDon extends javax.swing.JPanel {
 
 private void fillDataHoaDon(HoaDonModel hdct) {
     lblMaHoaDon.setText(hdct.getMaHoaDon());
-    
-    // Kiểm tra và hiển thị tên khách hàng hoặc "Khách vãng lai"
     lblTenKhachHang.setText(hdct.getTenKhachHang() == null || hdct.getTenKhachHang().trim().isEmpty() ? "Khách vãng lai" : hdct.getTenKhachHang());
-    
-    // Hiển thị số điện thoại
     lblSoDienThoai.setText(hdct.getSoDienThoai());
-    
-    // Hiển thị thời gian tạo hóa đơn
     lblThoiGianTao.setText(hdct.getThoiGianTao());
-    
-    // Hiển thị loại thanh toán
     lblLoaiThanhToan.setText(hdct.getLoaiThanhToan());
-    
-    // Hiển thị trạng thái thanh toán
     lblTrangThai.setText(String.valueOf(hdct.getTrangThai() == 0 ? "Đã Thanh Toán" : "Chưa Thanh Toán"));
-    
-    // Hiển thị tên voucher (nếu có)
-    lbltenVoucher.setText(hdct.getTenVoucher());
-    
-    // Định dạng số tiền và hiển thị (có dấu phân cách hàng nghìn)
+    if (hdct.getLoaiVoucher()!= null) {
+        if (hdct.getLoaiVoucher().equals("Tiền mặt")) {
+            lbltenVoucher.setText(hdct.getGiaTri() + " VND");
+        }
+        else {
+            lbltenVoucher.setText(hdct.getGiaTri() + " %");
+        }
+    }
+    else {
+        lbltenVoucher.setText(null);
+    }
     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-    String formattedTongTien = currencyFormat.format(hdct.getTongTien());
+    String formattedTongTien = currencyFormat.format(repo.getTongTien(hdct.getId()));
+    String formattedThanhTien = currencyFormat.format(hdct.getTongTien());
+//NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+//    String formattedTongTien = currencyFormat.format(hdct.getTongTien());
+//    lblTongTienHD.setText(repo.getTongTien(hdct.getId()) + " đ");
+//    lblThanhTienHD.setText(formattedTongTien);
     lblTongTienHD.setText(formattedTongTien);
-    
-    // Định dạng số tiền cho thanh toán
-    lblThanhTienHD.setText(formattedTongTien);
+    lblThanhTienHD.setText(formattedThanhTien);
 }
 
 
@@ -1972,9 +1977,7 @@ private void fillDataHoaDon(HoaDonModel hdct) {
         }
     }
     
-//    public void removeTitleBar() {
-//        ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
-//    }
+
 
     public int getIdHD(int index) {
         return qlyhd.getIdHD().get(index).getId();
@@ -1983,9 +1986,6 @@ private void fillDataHoaDon(HoaDonModel hdct) {
     public int getIdHDCT(int index) {
         return qLyChiTiet.getIdHDCT().get(index).getId();
     }
-//    public void setMouse() {
-//        txtLocNgayBD.requestFocus();
-//    }
 
 
 private void chonSanPham() {
@@ -2245,7 +2245,15 @@ public void createFromKhachHang() {
             }
             qLy.xuatHoaDon(ma, txtTenKhachHang.getText(), txtSoDienThoai.getText(), txtTongTien.getText(),
                     txtMaVoucher.getText(), txtGiamGia.getText(), txtThanhTien.getText(), in);
-
         }
+    }
+    public String tongTien() {
+        long tongTien = 0;
+        for (int i = 0; i < tblSanPhamHD.getRowCount(); i++) {
+
+            tongTien += Long.parseLong(tblSanPhamHD.getValueAt(i, 2).toString()) * Long.parseLong(tblSanPhamHD.getValueAt(i, 3).toString());
+        }
+
+        return String.valueOf(tongTien) + " VNĐ";
     }
 }

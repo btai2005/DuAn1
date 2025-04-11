@@ -575,8 +575,7 @@ public class BanHang {
             ps.setString(1, loai);
             ps.setLong(2, tongTien);
             ps.setInt(3, 0);
-            ps.setInt(4, idHd);
-            
+            ps.setInt(4, idHd);   
             return ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

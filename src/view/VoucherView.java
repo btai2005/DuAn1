@@ -171,7 +171,6 @@ public class VoucherView extends javax.swing.JPanel {
         ComboBox_loaivoucher = new javax.swing.JComboBox<>();
         ADD = new javax.swing.JButton();
         UPDATE = new javax.swing.JButton();
-        DELETE = new javax.swing.JButton();
         Seach = new javax.swing.JButton();
         txt_timkem = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -245,16 +244,6 @@ public class VoucherView extends javax.swing.JPanel {
             }
         });
 
-        DELETE.setBackground(new java.awt.Color(255, 204, 204));
-        DELETE.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
-        DELETE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/raven/icon/icons8-hide-20.png"))); // NOI18N
-        DELETE.setText("Xóa");
-        DELETE.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DELETEActionPerformed(evt);
-            }
-        });
-
         Seach.setBackground(new java.awt.Color(255, 204, 204));
         Seach.setFont(new java.awt.Font("Roboto", 1, 12)); // NOI18N
         Seach.setText("Tìm Kiếm");
@@ -312,8 +301,7 @@ public class VoucherView extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_ma, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(UPDATE, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txt_ma, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(59, 59, 59)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -328,11 +316,11 @@ public class VoucherView extends javax.swing.JPanel {
                                 .addComponent(dateChooserNgayKetThuc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(139, 139, 139)
+                            .addGap(201, 201, 201)
                             .addComponent(ADD, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(194, 194, 194)
-                            .addComponent(DELETE, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(37, 37, 37)
+                            .addGap(85, 85, 85)
+                            .addComponent(UPDATE, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(83, 83, 83)
                             .addComponent(jButton1)
                             .addGap(0, 0, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -375,7 +363,6 @@ public class VoucherView extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ADD)
                     .addComponent(UPDATE)
-                    .addComponent(DELETE)
                     .addComponent(jButton1))
                 .addGap(44, 44, 44)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -413,165 +400,179 @@ public class VoucherView extends javax.swing.JPanel {
     private void ADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADDActionPerformed
    // Lấy dữ liệu từ các field trên giao diện
     String maVoucher = txt_ma.getText();
-    String tenVoucher = txt_ten.getText();
+String tenVoucher = txt_ten.getText();
+
+// Lấy ngày từ JDateChooser
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+if (r_vc.checkMaExists(maVoucher)) {
+    JOptionPane.showMessageDialog(this, "Mã voucher đã tồn tại. Vui lòng nhập mã khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// Kiểm tra xem người dùng đã chọn ngày hay chưa
+if (dateChooserNgayBatDau.getDate() == null || dateChooserNgayKetThuc.getDate() == null) {
+    JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// Kiểm tra ngày bắt đầu phải nhỏ hơn ngày kết thúc
+if (dateChooserNgayBatDau.getDate().after(dateChooserNgayKetThuc.getDate())) {
+    JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+String ngayBatDau = sdf.format(dateChooserNgayBatDau.getDate());
+String ngayKetThuc = sdf.format(dateChooserNgayKetThuc.getDate());
+
+String loaiVoucher = (String) ComboBox_loaivoucher.getSelectedItem();
+String giaTriText = txt_giatri.getText();
+
+// Kiểm tra dữ liệu đầu vào
+if (maVoucher.isEmpty() || tenVoucher.isEmpty() || loaiVoucher == null || giaTriText.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin voucher.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+try {
+    double giaTri = Double.parseDouble(giaTriText);
     
-    // Lấy ngày từ JDateChooser
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    
-    if (r_vc.checkMaExists(maVoucher)) {
-        JOptionPane.showMessageDialog(this, "Mã voucher đã tồn tại. Vui lòng nhập mã khác.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    // Kiểm tra xem người dùng đã chọn ngày hay chưa
-    if (dateChooserNgayBatDau.getDate() == null || dateChooserNgayKetThuc.getDate() == null) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-     // Kiểm tra ngày bắt đầu phải nhỏ hơn ngày kết thúc
-    if (dateChooserNgayBatDau.getDate().after(dateChooserNgayKetThuc.getDate())) {
-        JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    if (giaTri <= 0) {
+        JOptionPane.showMessageDialog(this, "Giá trị voucher phải lớn hơn 0.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    String ngayBatDau = sdf.format(dateChooserNgayBatDau.getDate());
-    String ngayKetThuc = sdf.format(dateChooserNgayKetThuc.getDate());
-    
-    String loaiVoucher = (String) ComboBox_loaivoucher.getSelectedItem();
-    String giaTriText = txt_giatri.getText();
-
-    // Kiểm tra dữ liệu đầu vào
-    if (maVoucher.isEmpty() || tenVoucher.isEmpty() || loaiVoucher == null || giaTriText.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin voucher.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    // Kiểm tra nếu là loại "Phần trăm" thì giá trị không được vượt quá 100
+    if (loaiVoucher.equalsIgnoreCase("Phần trăm") && giaTri > 100) {
+        JOptionPane.showMessageDialog(this, "Giá trị phần trăm không được vượt quá 100%.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    try {
-        double giaTri = Double.parseDouble(giaTriText);
-        if (giaTri <= 0) {
-            JOptionPane.showMessageDialog(this, "Giá trị voucher phải lớn hơn 0.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
+    // Tạo đối tượng Voucher mới
+    Voucher newVoucher = new Voucher(0, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, 0);
+
+    // Tính trạng thái dựa trên ngày bắt đầu và ngày kết thúc
+    int trangThai = newVoucher.tinhTrangThai();
+    newVoucher.setTrangThai(trangThai);
+
+    // Hiển thị hộp thoại xác nhận trước khi thêm
+    int confirmResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thêm voucher này?", "Xác nhận thêm voucher", JOptionPane.YES_NO_OPTION);
+    if (confirmResult == JOptionPane.YES_OPTION) {
+        if (r_vc.add(newVoucher) > 0) {
+            JOptionPane.showMessageDialog(this, "Thêm voucher thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+            // Cập nhật lại bảng hiển thị
+            filltable(r_vc.getAll());
+
+            // Hiển thị dữ liệu của voucher vừa thêm
+            showData(r_vc.getAll().size() - 1);
+
+            // Reset các field nhập liệu
+            txt_ma.setText("");
+            txt_ten.setText("");
+            dateChooserNgayBatDau.setDate(null);
+            dateChooserNgayKetThuc.setDate(null);
+            txt_giatri.setText("");
+            ComboBox_loaivoucher.setSelectedIndex(0);
+        } else {
+            JOptionPane.showMessageDialog(this, "Thêm voucher thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Tạo đối tượng Voucher mới
-        // Đặt trạng thái mặc định là 0, sau đó tính trạng thái bằng tinhTrangThai()
-        Voucher newVoucher = new Voucher(0, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, 0);
-
-        // Tính trạng thái dựa trên ngày bắt đầu và ngày kết thúc
-        int trangThai = newVoucher.tinhTrangThai();
-        newVoucher.setTrangThai(trangThai); // Cập nhật trạng thái cho đối tượng
-
-        // Hiển thị hộp thoại xác nhận trước khi thêm
-        int confirmResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thêm voucher này?", "Xác nhận thêm voucher", JOptionPane.YES_NO_OPTION);
-        if (confirmResult == JOptionPane.YES_OPTION) {
-            // Gọi phương thức add từ Repository
-            if (r_vc.add(newVoucher) > 0) {
-                JOptionPane.showMessageDialog(this, "Thêm voucher thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-
-                // Cập nhật lại bảng hiển thị
-                filltable(r_vc.getAll());
-
-                // Hiển thị dữ liệu của voucher vừa thêm
-                showData(r_vc.getAll().size() - 1);
-
-                // Xóa trắng các field nhập liệu
-                txt_ma.setText("");
-                txt_ten.setText("");
-                dateChooserNgayBatDau.setDate(null);
-                dateChooserNgayKetThuc.setDate(null);
-                txt_giatri.setText("");
-                ComboBox_loaivoucher.setSelectedIndex(0);
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm voucher thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Giá trị voucher phải là một số hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(this, "Giá trị voucher phải là một số hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+}
+
   
     }//GEN-LAST:event_ADDActionPerformed
 
     private void UPDATEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UPDATEActionPerformed
         String maVoucher = txt_ma.getText().trim();
-    String tenVoucher = txt_ten.getText().trim();
+String tenVoucher = txt_ten.getText().trim();
 
-    // Kiểm tra ngày bắt đầu và kết thúc
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    
-    String ngayBatDau = sdf.format(dateChooserNgayBatDau.getDate());
-    String ngayKetThuc = sdf.format(dateChooserNgayKetThuc.getDate());
-    
-      // Kiểm tra ngày bắt đầu phải nhỏ hơn ngày kết thúc
-    if (dateChooserNgayBatDau.getDate().after(dateChooserNgayKetThuc.getDate())) {
-        JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+// Kiểm tra ngày bắt đầu và kết thúc
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+String ngayBatDau = sdf.format(dateChooserNgayBatDau.getDate());
+String ngayKetThuc = sdf.format(dateChooserNgayKetThuc.getDate());
+
+// Kiểm tra ngày bắt đầu phải nhỏ hơn ngày kết thúc
+if (dateChooserNgayBatDau.getDate().after(dateChooserNgayKetThuc.getDate())) {
+    JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước ngày kết thúc.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// Kiểm tra loại voucher và giá trị voucher
+String loaiVoucher = (String) ComboBox_loaivoucher.getSelectedItem();
+String giaTriText = txt_giatri.getText().trim().replace(",", "");
+
+// Kiểm tra nếu không chọn voucher
+int selectedRow = Table_Voucher.getSelectedRow();
+if (selectedRow < 0) {
+    JOptionPane.showMessageDialog(this, "Vui lòng chọn một voucher để cập nhật.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// Lấy mã voucher của voucher đã chọn
+int voucherId = (int) Table_Voucher.getValueAt(selectedRow, 0);
+
+// Kiểm tra nếu các thông tin quan trọng bị thiếu
+if (maVoucher.isEmpty() || tenVoucher.isEmpty() || ngayBatDau == null || ngayKetThuc == null || loaiVoucher == null || giaTriText.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin voucher.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+// Kiểm tra giá trị voucher hợp lệ
+double giaTri = 0;
+try {
+    giaTri = Double.parseDouble(giaTriText);
+    if (giaTri <= 0) {
+        JOptionPane.showMessageDialog(this, "Giá trị voucher phải lớn hơn 0.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
-    // Kiểm tra loại voucher và giá trị voucher
-    String loaiVoucher = (String) ComboBox_loaivoucher.getSelectedItem();
-    String giaTriText = txt_giatri.getText().trim().replace(",", "");
-
-    // Kiểm tra nếu không chọn voucher
-    int selectedRow = Table_Voucher.getSelectedRow();
-    if (selectedRow < 0) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn một voucher để cập nhật.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    // Kiểm tra nếu là loại "Phần trăm" thì giá trị không được vượt quá 100
+    if (loaiVoucher.equalsIgnoreCase("Phần trăm") && giaTri > 100) {
+        JOptionPane.showMessageDialog(this, "Giá trị phần trăm không được vượt quá 100%.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         return;
     }
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(this, "Giá trị voucher phải là một số hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    return;
+}
 
-    // Lấy mã voucher của voucher đã chọn
-    int voucherId = (int) Table_Voucher.getValueAt(selectedRow, 0);
+// Tính trạng thái mới của voucher
+Voucher tempVoucher = new Voucher(0, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, 0);
+int trangThai = tempVoucher.tinhTrangThai();
 
-    // Kiểm tra nếu các thông tin quan trọng bị thiếu
-    if (maVoucher.isEmpty() || tenVoucher.isEmpty() || ngayBatDau == null || ngayKetThuc == null || loaiVoucher == null || giaTriText.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin voucher.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+// Tạo đối tượng voucher mới với trạng thái đã tính
+Voucher updatedVoucher = new Voucher(voucherId, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, trangThai);
 
-    // Kiểm tra giá trị voucher hợp lệ
-    double giaTri = 0;
-    try {
-        giaTri = Double.parseDouble(giaTriText);
-        if (giaTri <= 0) {
-            JOptionPane.showMessageDialog(this, "Giá trị voucher phải lớn hơn 0.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Giá trị voucher phải là một số hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+// Thêm hộp thoại xác nhận Yes/No
+int confirm = JOptionPane.showConfirmDialog(
+    this,
+    "Bạn có chắc chắn muốn cập nhật voucher này không?\n" +
+    "Mã Voucher: " + maVoucher + "\n" +
+    "Tên Voucher: " + tenVoucher,
+    "Xác nhận cập nhật",
+    JOptionPane.YES_NO_OPTION,
+    JOptionPane.QUESTION_MESSAGE
+);
 
-    // Tính trạng thái mới của voucher
-    Voucher tempVoucher = new Voucher(0, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, 0);
-    int trangThai = tempVoucher.tinhTrangThai();
-
-    // Tạo đối tượng voucher mới với trạng thái đã tính
-    Voucher updatedVoucher = new Voucher(voucherId, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, trangThai);
-
-    // Thêm hộp thoại xác nhận Yes/No
-    int confirm = JOptionPane.showConfirmDialog(
-        this,
-        "Bạn có chắc chắn muốn cập nhật voucher này không?\n" +
-        "Mã Voucher: " + maVoucher + "\n" +
-        "Tên Voucher: " + tenVoucher,
-        "Xác nhận cập nhật",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE
-    );
-
-    // Nếu người dùng chọn Yes, tiến hành cập nhật
-    if (confirm == JOptionPane.YES_OPTION) {
-        // Cập nhật voucher vào cơ sở dữ liệu
-        if (r_vc.update(updatedVoucher, voucherId) > 0) {
-            JOptionPane.showMessageDialog(this, "Cập nhật voucher thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-            filltable(r_vc.getAll());
-            Table_Voucher.setRowSelectionInterval(selectedRow, selectedRow);
-        } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật voucher thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+// Nếu người dùng chọn Yes, tiến hành cập nhật
+if (confirm == JOptionPane.YES_OPTION) {
+    // Cập nhật voucher vào cơ sở dữ liệu
+    if (r_vc.update(updatedVoucher, voucherId) > 0) {
+        JOptionPane.showMessageDialog(this, "Cập nhật voucher thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        filltable(r_vc.getAll());
+        Table_Voucher.setRowSelectionInterval(selectedRow, selectedRow);
     } else {
-        // Nếu người dùng chọn No, hủy thao tác
-        JOptionPane.showMessageDialog(this, "Đã hủy cập nhật voucher.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Cập nhật voucher thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
+} else {
+    // Nếu người dùng chọn No, hủy thao tác
+    JOptionPane.showMessageDialog(this, "Đã hủy cập nhật voucher.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+}
+
     }//GEN-LAST:event_UPDATEActionPerformed
 
     private void SeachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeachActionPerformed
@@ -599,16 +600,10 @@ public class VoucherView extends javax.swing.JPanel {
     filltable(r_vc.getAll());
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void DELETEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DELETEActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_DELETEActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ADD;
     private javax.swing.JComboBox<String> ComboBox_loaivoucher;
-    private javax.swing.JButton DELETE;
     private javax.swing.JButton Seach;
     private javax.swing.JTable Table_Voucher;
     private javax.swing.JButton UPDATE;

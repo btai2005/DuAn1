@@ -20,9 +20,13 @@ public class HoaDonModel {
     private String soDienThoai;
     private String tenNhanVien;
     private int idVoucher;
+    private int giaTri;
     private String tenVoucher;
     private String thoiGianTao;
     private int trangThai;
+    private String loaiVoucher;
+    
+    
 
     public HoaDonModel() {
     }
@@ -55,9 +59,9 @@ public class HoaDonModel {
         this.idVoucher = idVoucher;
         this.thoiGianTao = thoiGianTao;
         this.trangThai = trangThai;
-    }//idVoucher
+    }
 
-    public HoaDonModel(int id, String maHoaDon, String tenNhanVien, String tenKhachHang, String soDienThoai, String thoiGianTao, String loaiThanhToan, int tongTien, String idVoucher, int trangThai) {
+    public HoaDonModel(int id, String maHoaDon, String tenNhanVien, String tenKhachHang, String soDienThoai, String thoiGianTao, String loaiThanhToan, int tongTien, String tenVoucher, int trangThai) {
         this.id = id;
         this.maHoaDon = maHoaDon;
         this.tenNhanVien = tenNhanVien;
@@ -69,6 +73,43 @@ public class HoaDonModel {
         this.tenVoucher = tenVoucher;
         this.trangThai = trangThai;
     }
+    
+
+    public HoaDonModel(int id, String maHoaDon, String tenNhanVien, String tenKhachHang, String soDienThoai, String thoiGianTao, String loaiThanhToan, int tongTien, int giaTri, int trangThai) {
+        this.id = id;
+        this.maHoaDon = maHoaDon;
+        this.tenNhanVien = tenNhanVien;
+        this.tenKhachHang = tenKhachHang;
+        this.soDienThoai = soDienThoai;
+        this.thoiGianTao = thoiGianTao;
+        this.loaiThanhToan = loaiThanhToan;
+        this.tongTien = tongTien;
+        this.giaTri = giaTri;
+        this.trangThai = trangThai;
+    }
+
+    public HoaDonModel(int id, String maHoaDon, String tenNhanVien, String tenKhachHang, String soDienThoai, String thoiGianTao, String loaiThanhToan, int tongTien, int giaTri, int trangThai, String loaiVoucher) {
+        this.id = id;
+        this.maHoaDon = maHoaDon;
+        this.tenNhanVien = tenNhanVien;
+        this.tenKhachHang = tenKhachHang;
+        this.soDienThoai = soDienThoai;
+        this.thoiGianTao = thoiGianTao;
+        this.loaiThanhToan = loaiThanhToan;
+        this.tongTien = tongTien;
+        this.giaTri = giaTri;
+        this.trangThai = trangThai;
+        this.loaiVoucher = loaiVoucher;
+    }
+    
+    public String getLoaiVoucher() {
+        return loaiVoucher;
+    }
+
+    public void setLoaiVoucher(String loaiVoucher) {
+        this.loaiVoucher = loaiVoucher;
+    }
+    
 
     public int getId() {
         return id;
@@ -156,6 +197,14 @@ public class HoaDonModel {
 
     public void setThoiGianTao(String thoiGianTao) {
         this.thoiGianTao = thoiGianTao;
+    }
+
+    public int getGiaTri() {
+        return giaTri;
+    }
+
+    public void setGiaTri(int giaTri) {
+        this.giaTri = giaTri;
     }
 
     @Override

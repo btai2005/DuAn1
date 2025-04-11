@@ -34,7 +34,7 @@ public class HoaDonRepo {
 
     StringBuilder sql = new StringBuilder("""
         SELECT hd.id, maHoaDon, nv.hoTen, kh.hoTen, kh.soDienThoai,
-               hd.ngayTao, loaiThanhToan, tongTien, vc.tenVoucher, hd.trangThai 
+               hd.ngayTao, loaiThanhToan, tongTien, vc.giaTri, hd.trangThai, vc.LoaiVoucher 
         FROM HoaDon hd
         LEFT JOIN NhanVien nv ON hd.idNhanVien = nv.id
         LEFT JOIN KhachHang kh ON hd.idKhachHang = kh.id
@@ -63,7 +63,7 @@ public class HoaDonRepo {
             list.add(new HoaDonModel(
                 rs.getInt(1), rs.getString(2), rs.getString(3),
                 rs.getString(4), rs.getString(5), rs.getString(6),
-                rs.getString(7), rs.getInt(8), rs.getString(9), rs.getInt(10)
+                rs.getString(7), rs.getInt(8), rs.getInt(9), rs.getInt(10), rs.getString(11)
             ));
         }
     } catch (Exception e) {
@@ -109,11 +109,12 @@ public class HoaDonRepo {
         ArrayList<HoaDonModel> list = new ArrayList<>();
         
         String sql = """
-                                       select hd.id, maHoaDon,nv.hoTen,kh.hoTen,kh.soDienThoai,
-                                        hd.ngayTao,loaiThanhToan,tongTien, vc.tenVoucher, hd.trangThai from HoaDon hd
-                                        LEFT JOIN NhanVien nv ON hd.idNhanVien = nv.id
-                                        LEFT JOIN KhachHang kh ON hd.idKhachHang = kh.id
-                                        LEFT JOIN Voucher vc ON hd.idVoucher = vc.id""";
+                     Select hd.id, maHoaDon,nv.hoTen,kh.hoTen,kh.soDienThoai,
+                                                             hd.ngayTao,loaiThanhToan,tongTien, vc.tenVoucher, hd.trangThai, vc.loaiVoucher from HoaDon hd
+                                                             LEFT JOIN NhanVien nv ON hd.idNhanVien = nv.id
+                                                             LEFT JOIN KhachHang kh ON hd.idKhachHang = kh.id
+                                                             LEFT JOIN Voucher vc ON hd.idVoucher = vc.id
+                     """;
         try {
             
             ps = conn.prepareStatement(sql);
@@ -122,7 +123,7 @@ public class HoaDonRepo {
             while (rs.next()) {                
             list.add(new HoaDonModel(rs.getInt(1), rs.getString(2), rs.getString(3)
                     , rs.getString(4), rs.getString(5), rs.getString(6), 
-                    rs.getString(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));           
+                    rs.getString(7), rs.getInt(8), rs.getInt(9), rs.getInt(10), rs.getString(11)));           
             }
         } catch (Exception e) {
             e.printStackTrace();
