@@ -29,16 +29,18 @@ public class HoaDonChiTietRepo {
 
     String sql = ("""
                   select hdct.id, spct.maSanPhamChiTiet, kh.hoTen, kh.soDienThoai, hdct.ngayTao, 
-                      			hd.loaiThanhToan,hdct.trangThai,hd.tongTien,
-                      			spct.TenSanPhamChiTiet tenGiay, spct.giaSanPham, hdct.soLuong,
-                      			spct.giaSanPham * hdct.soLuong thanhTien 
-                  from HoaDonChiTiet hdct
-                      	LEFT JOIN SanPhamChiTiet spct ON hdct.idSanPhamChiTiet = spct.id
-                      	LEFT JOIN LoaiSanPham sp ON spct.ID = sp.id
-                      	LEFT JOIN HoaDon hd ON hdct.idHoaDon = hd.id
-                      	LEFT JOIN KhachHang kh ON hd.idKhachHang = kh.id
-                  where hd.ID = ? and hdct.trangthai = 1
-                  ORDER BY hdct.ngayTao DESC
+                                                                            			hd.loaiThanhToan,hdct.trangThai,hd.tongTien,
+                                                                            			spct.TenSanPhamChiTiet tenGiay,
+                                                      								hdct.TongTien / hdct.soLuong, 
+                                                      								hdct.soLuong,
+                                                                            			hdct.TongTien
+                                                                        from HoaDonChiTiet hdct
+                                                                            	LEFT JOIN SanPhamChiTiet spct ON hdct.idSanPhamChiTiet = spct.id
+                                                                            	LEFT JOIN LoaiSanPham sp ON spct.ID = sp.id
+                                                                            	LEFT JOIN HoaDon hd ON hdct.idHoaDon = hd.id
+                                                                            	LEFT JOIN KhachHang kh ON hd.idKhachHang = kh.id
+                                                                        where hd.ID = ? and hdct.trangthai = 1
+                                                                        ORDER BY hdct.ngayTao DESC
                   """);
 
     try {

@@ -1504,7 +1504,7 @@ public class HoaDon extends javax.swing.JPanel {
         jTabbedPane5.setTitleAt(0, hd.getMaHoaDon());
         jblMaHoaDon.setText(hd.getMaHoaDon());
         fillTableHoaDon(hd.getId());
-        tongTien(repo.getTongTien(hd.getId()));
+        tongTien(repo.getTongTien1(hd.getId()));
 
         String tenKH = qLy.getAllHoaDonCho().get(indexHdC).getTenKhachHang();
 
@@ -1686,7 +1686,7 @@ public class HoaDon extends javax.swing.JPanel {
                         }
                     }
                     this.qLy.updateThanhToanHoaDon(loai, tongTien,
-                            qLy.getHoaDon(tblHoaDonCho.getSelectedRow()).getId());
+                            qLy.getHoaDon(tblHoaDonCho.getSelectedRow()).getId(), txtGiamGia.getText());
                     JOptionPane.showMessageDialog(this, "Thanh toán thành công");
                     this.loadForm();
                 }
@@ -1705,6 +1705,7 @@ public class HoaDon extends javax.swing.JPanel {
         jblMaHoaDon.setText("#####");
         txtMaVoucher.setText(null);
         txtGiamGia.setText(null);
+        jTabbedPane5.setTitleAt(0, "#####");
         fillTableHoaDonCho();
         fillTableHoaDon();
         DefaultTableModel tblModel = (DefaultTableModel) tblHoaDon.getModel();
@@ -1755,7 +1756,7 @@ public class HoaDon extends javax.swing.JPanel {
             fillTableSp();
             HoaDonModel hd = qLy.getHoaDon(tblHoaDonCho.getSelectedRow());
             fillTableHoaDon(hd.getId());
-            tongTien(repo.getTongTien(hd.getId()));
+            tongTien(repo.getTongTien1(hd.getId()));
         }
     }
 
@@ -1926,19 +1927,10 @@ private void fillDataHoaDon(HoaDonModel hdct) {
     lblThoiGianTao.setText(hdct.getThoiGianTao());
     lblLoaiThanhToan.setText(hdct.getLoaiThanhToan());
     lblTrangThai.setText(String.valueOf(hdct.getTrangThai() == 0 ? "Đã Thanh Toán" : "Chưa Thanh Toán"));
-    if (hdct.getLoaiVoucher()!= null) {
-        if (hdct.getLoaiVoucher().equals("Tiền mặt")) {
-            lbltenVoucher.setText(hdct.getGiaTri() + " VND");
-        }
-        else {
-            lbltenVoucher.setText(hdct.getGiaTri() + " %");
-        }
-    }
-    else {
-        lbltenVoucher.setText(null);
-    }
+        lbltenVoucher.setText(hdct.getLoaiVoucher());
+    
     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-    String formattedTongTien = currencyFormat.format(repo.getTongTien(hdct.getId()));
+    String formattedTongTien = currencyFormat.format(repo.getTongTien0(hdct.getId()));
     String formattedThanhTien = currencyFormat.format(hdct.getTongTien());
 //NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 //    String formattedTongTien = currencyFormat.format(hdct.getTongTien());
@@ -2028,7 +2020,7 @@ private void chonSanPham() {
                 }
 
                 repo.updateSoLuongSpct(soLuong, spct.getId());
-                tongTien(repo.getTongTien(hd.getId()));
+                tongTien(repo.getTongTien1(hd.getId()));
                 fillTableHoaDon(hd.getId());
                 fillTableSp();
             } else {
@@ -2221,7 +2213,7 @@ public void createFromKhachHang() {
                             JOptionPane.showMessageDialog(this, "Số lượng sản phẩm không đủ");
                         }
 
-                        tongTien(repo.getTongTien(hd.getId()));
+                        tongTien(repo.getTongTien1(hd.getId()));
                         fillTableHoaDon(hd.getId());
                         fillTableSp();
                     } else {
@@ -2240,9 +2232,7 @@ public void createFromKhachHang() {
         } else if (txtTongTien.getText().length() < 2) {
             JOptionPane.showMessageDialog(this,"Hóa đơn trống");
         } else {
-            if (!txtMaVoucher.getText().isEmpty()) {
-                this.inputThanhTien(false);
-            }
+            
             qLy.xuatHoaDon(ma, txtTenKhachHang.getText(), txtSoDienThoai.getText(), txtTongTien.getText(),
                     txtMaVoucher.getText(), txtGiamGia.getText(), txtThanhTien.getText(), in);
         }

@@ -297,11 +297,35 @@ public class BanHang {
         }
     }
     
-    public int getTongTien (int idHoaDon){
+    public int getTongTien0 (int idHoaDon){
         String query ="""
-                        SELECT SUM(spct.GiaSanPham * hdct.SoLuong) FROM HoaDonChiTiet hdct
-                        LEFT JOIN SanPhamChiTiet spct ON spct.ID = hdct.IdSanPhamChiTiet
-                        WHERE IdHoaDon = ? AND hdct.TrangThai = 1
+                       SELECT SUM(TongTien) FROM HoaDonChiTiet 
+                                                WHERE IdHoaDon = ? AND TrangThai = 1
+                      """;
+        try {
+            ps = conn.prepareStatement(query);
+            
+            ps.setInt(1, idHoaDon);
+            
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    
+    
+    public int getTongTien1 (int idHoaDon){
+        String query ="""
+                      SELECT SUM(spct.GiaSanPham * hdct.SoLuong) FROM HoaDonChiTiet hdct
+                                LEFT JOIN SanPhamChiTiet spct ON spct.ID = hdct.IdSanPhamChiTiet
+                                WHERE IdHoaDon = ? AND hdct.TrangThai = 1
+                       
                       """;
         try {
             ps = conn.prepareStatement(query);
@@ -567,15 +591,18 @@ public class BanHang {
             return 0;
         }
     }
-    public int updateThanhToanHoaDon(String loai, long tongTien, int idHd) {
+    public int updateThanhToanHoaDon(String loai, long tongTien, int idHd, String voucherGiam) {
         
         try {
-            ps = conn.prepareStatement("UPDATE HoaDon SET loaiThanhToan = ?, tongTien = ?, trangThai = ? WHERE id = ?");
+            ps = conn.prepareStatement("UPDATE HoaDon SET loaiThanhToan = ?, tongTien = ?, trangThai = ?, voucherGiam = ? WHERE id = ?");
             
             ps.setString(1, loai);
             ps.setLong(2, tongTien);
             ps.setInt(3, 0);
-            ps.setInt(4, idHd);   
+            
+            ps.setString(4, voucherGiam);
+            ps.setInt(5, idHd);   
+            
             return ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

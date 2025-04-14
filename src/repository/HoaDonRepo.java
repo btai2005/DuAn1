@@ -34,7 +34,7 @@ public class HoaDonRepo {
 
     StringBuilder sql = new StringBuilder("""
         SELECT hd.id, maHoaDon, nv.hoTen, kh.hoTen, kh.soDienThoai,
-               hd.ngayTao, loaiThanhToan, tongTien, vc.giaTri, hd.trangThai, vc.LoaiVoucher 
+               hd.ngayTao, loaiThanhToan, tongTien, vc.giaTri, hd.trangThai, hd.voucherGiam 
         FROM HoaDon hd
         LEFT JOIN NhanVien nv ON hd.idNhanVien = nv.id
         LEFT JOIN KhachHang kh ON hd.idKhachHang = kh.id
