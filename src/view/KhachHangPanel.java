@@ -314,7 +314,7 @@ public class KhachHangPanel extends javax.swing.JPanel {
         List<KhachHangPanelModel> list = qLy.getAll(txtSearch.getText().trim());
 
         if (list.isEmpty()) {  // Kiểm tra nếu không có kết quả
-            JOptionPane.showMessageDialog(this, "Không có khách hàng nào thỏa mãn điều kiện tìm kiếm.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         // Duyệt qua các khách hàng và thêm vào bảng

@@ -15,13 +15,21 @@ public class RP_Voucher {
     PreparedStatement ps = null;
     ResultSet rs = null;
     String sql = null;
+    
+    public RP_Voucher () {
+        try {
+            con = Dbconnection.getConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Hiển thị tất cả voucher
     public ArrayList<Voucher> getAll() {
         ArrayList<Voucher> listVouchers = new ArrayList<>();
         sql = "SELECT id, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, trangThai FROM Voucher";
         try {
-            con = Dbconnection.getConnection();
+            
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -48,7 +56,6 @@ public class RP_Voucher {
     public int add(Voucher voucher) {
         sql = "INSERT INTO Voucher (maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, trangThai) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
-            con = Dbconnection.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, voucher.getMaVoucher());
             ps.setString(2, voucher.getTenVoucher());
@@ -68,7 +75,6 @@ public class RP_Voucher {
     public int delete(int id) {
         sql = "DELETE FROM Voucher WHERE id = ?";
         try {
-            con = Dbconnection.getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             return ps.executeUpdate();
@@ -103,7 +109,6 @@ public class RP_Voucher {
         ArrayList<Voucher> listVouchers = new ArrayList<>();
         sql = "SELECT id, maVoucher, tenVoucher, ngayBatDau, ngayKetThuc, loaiVoucher, giaTri, trangThai FROM Voucher WHERE maVoucher LIKE ?";
         try {
-            con = Dbconnection.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, "%" + maVoucher + "%"); // Tìm kiếm theo mã voucher với ký tự wildcard "%"
             rs = ps.executeQuery();
@@ -130,7 +135,6 @@ public class RP_Voucher {
          public boolean checkMaExists(String maVoucher) {
         String SQL = "SELECT COUNT(*) FROM Voucher WHERE MaVoucher = ?";
         try {
-            con = Dbconnection.getConnection();
             ps = con.prepareStatement(SQL);
             ps.setString(1, maVoucher);
             ResultSet rs = ps.executeQuery();

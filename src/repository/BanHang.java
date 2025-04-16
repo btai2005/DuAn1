@@ -627,10 +627,10 @@ public class BanHang {
     
     public int updateSoLuongHdct(int soLuong, int idHdct) {
         try {
-            ps = conn.prepareStatement("UPDATE HoaDonChiTiet SET soLuong = ? WHERE id = ?");
+            ps = conn.prepareStatement("UPDATE HoaDonChiTiet SET tongTien = tongTien / soLuong * ?, soLuong = ? WHERE id = ?");
             ps.setInt(1, soLuong);
-            ps.setInt(2, idHdct);
-            
+            ps.setInt(2, soLuong);
+            ps.setInt(3, idHdct);
             return ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

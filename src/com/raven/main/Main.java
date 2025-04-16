@@ -8,13 +8,18 @@ import view.HoaDon;
 import view.KhachHangView;
 import view.NhanVienView;
 import view.SanPhamView;
+import view.ThongKeView;
 import view.TrangChu;
 import view.VoucherView;
 
 
 public class Main extends javax.swing.JFrame {
+    private String vaiTro;
+    private int idNhanVien;
 
-    public Main() {
+    public Main(String vaiTro, int idNhanVien) {
+        this.vaiTro = vaiTro;
+        this.idNhanVien = idNhanVien;
         initComponents();
         init();
     }
@@ -30,11 +35,11 @@ public class Main extends javax.swing.JFrame {
             } else if (index == 2) {
                     setForm(new NhanVienView());
             } else if (index == 3) {
-                    setForm(new HoaDon());
+                    setForm(new HoaDon(idNhanVien));
             } else if (index == 4) {
                 setForm(new KhachHangView());
             } else if (index == 5) {
-                
+                    setForm(new ThongKeView());
             }else if (index == 6) {
                 setForm(new VoucherView());
             }else{
@@ -131,7 +136,7 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                new Main("Nhân Viên",1).setVisible(true);
             }
         });
     }

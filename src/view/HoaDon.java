@@ -40,7 +40,7 @@ public class HoaDon extends javax.swing.JPanel {
     private BanHang qLy = new BanHang();
     DefaultTableModel defaultTableModel;
     BanHang repo = new BanHang();
-    private int idNhanVien = 1;
+    private int idNhanVien;
     //hóa đơn
     private HoaDonRepo qlyhd = new HoaDonRepo();
     private HoaDonChiTietRepo qLyChiTiet = new HoaDonChiTietRepo();
@@ -48,12 +48,15 @@ public class HoaDon extends javax.swing.JPanel {
     /**
      * Creates new form HoaDon
      */
-    public HoaDon() {
+    public HoaDon(int idNhanVien) {
+        this.idNhanVien = idNhanVien;
         initComponents();
         fillTableHoaDonCho();
         fillTableSp();
         this.fillTableHoaDon();
         this.showPopup(tblHoaDon);
+        txtMaVoucher.setEditable(false);
+        txtGiamGia.setEditable(false);
     }
 
     /**
@@ -260,11 +263,13 @@ public class HoaDon extends javax.swing.JPanel {
         jLabel38.setText("Mã Voucher:");
 
         txtMaVoucher.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMaVoucher.setForeground(new java.awt.Color(255, 0, 0));
 
         jLabel39.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel39.setText("Giảm:");
 
         txtGiamGia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtGiamGia.setForeground(new java.awt.Color(255, 0, 0));
         txtGiamGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtGiamGiaActionPerformed(evt);
@@ -1515,7 +1520,7 @@ public class HoaDon extends javax.swing.JPanel {
             txtTenKhachHang.setText("Khách Vãng Lai");
             txtSoDienThoai.setText(null);
         }
-        cleanTextKhachHang();
+//        cleanTextKhachHang();
         cleanTextVoucher();
         cleanTextThanhToan();
 
@@ -1549,13 +1554,29 @@ public class HoaDon extends javax.swing.JPanel {
     }
 
     public void inputThanhTien(boolean tb) {
-    if (txtTongTien.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Chọn hóa đơn cần áp Voucher");
-    } else if (txtMaVoucher.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Chưa chọn mã Voucher nào!");
-    } else {
-        String tongTienStr = txtTongTien.getText().replace(".", "").replace(",", "");
-        String giamGiaStr = txtGiamGia.getText();
+    try {
+        // Kiểm tra hóa đơn
+        if (txtTongTien.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Chọn hóa đơn cần áp Voucher");
+            return;
+        }
+
+        // Kiểm tra mã voucher
+        if (txtMaVoucher.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Chưa chọn mã Voucher nào!");
+            return;
+        }
+
+        // Xử lý và kiểm tra txtThanhTien
+        String thanhTienStrRaw = txtThanhTien.getText().replace(",", "").replace(".", "").trim();
+        if (thanhTienStrRaw.isEmpty() || Double.parseDouble(thanhTienStrRaw) == 0) {
+            JOptionPane.showMessageDialog(this, "Chưa có sản phẩm trong hóa đơn");
+            return;
+        }
+
+        // Lấy dữ liệu và xử lý giảm giá
+        String tongTienStr = txtTongTien.getText().replace(".", "").replace(",", "").trim();
+        String giamGiaStr = txtGiamGia.getText().trim();
 
         int spaceIndex = giamGiaStr.indexOf(" ");
         if (spaceIndex == -1) {
@@ -1587,8 +1608,11 @@ public class HoaDon extends javax.swing.JPanel {
         if (tb) {
             JOptionPane.showMessageDialog(this, "Đã áp dụng Voucher thành công");
         }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Lỗi định dạng số! Vui lòng kiểm tra lại thông tin.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
 }
+
 
 
     public void inputThanhToan(JTextField txtTtLoai1, JTextField txtTtLoai2) {
@@ -2247,3 +2271,4 @@ public void createFromKhachHang() {
         return String.valueOf(tongTien) + " VNĐ";
     }
 }
+
